@@ -1,36 +1,38 @@
 <aside class="inset-y fixed left-0 z-20 flex h-full flex-col border-r">
   <div class="border-b p-2">
-    <button hlmBtn variant="outline" class="h-10 w-10 p-0">
+    <a hlmBtn routerLink="/" variant="outline" class="h-10 w-10 p-0">
       <hlm-icon name="lucideZap" class="size-5" />
-    </button>
+    </a>
   </div>
   <nav class="grid gap-1 p-2">
     <hlm-tooltip>
-      <button
+      <a
         hlmTooltipTrigger
         aria-describedby="Playground"
         position="right"
         [hideDelay]="50"
         hlmBtn
+        routerLink="/"
         variant="ghost"
         class="h-10 w-10 p-0 bg-muted"
       >
         <hlm-icon name="lucideTerminal" class="size-5" />
-      </button>
+      </a>
       <span *brnTooltipContent>Playground</span>
     </hlm-tooltip>
     <hlm-tooltip>
-      <button
+      <a
         hlmTooltipTrigger
         aria-describedby="Overview"
         position="right"
         [hideDelay]="50"
         hlmBtn
+        routerLink="/overview"
         variant="ghost"
         class="h-10 w-10 p-0"
       >
         <hlm-icon name="lucideBarChart" class="size-5" />
-      </button>
+      </a>
       <span *brnTooltipContent>Overview</span>
     </hlm-tooltip>
   </nav>
