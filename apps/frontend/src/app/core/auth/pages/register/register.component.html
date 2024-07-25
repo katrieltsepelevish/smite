@@ -1,0 +1,83 @@
+<div
+  hmlcard
+  class="bg-background overflow-hidden min-h-screen flex justify-center items-center"
+>
+  <div
+    class="mx-auto w-full justify-center space-y-6 sm:max-w-sm rounded-md border p-4"
+  >
+    <div class="space-y-2 text-center">
+      <h1 class="text-2xl font-semibold tracking-tight">Create an account</h1>
+      <p class="text-muted-foreground text-sm">
+        Enter your personal data to create your account
+      </p>
+    </div>
+    <form (ngSubmit)="send()" class="flex flex-col gap-4">
+      <div class="flex gap-4">
+        <label hlmLabel for="firstname"
+          >First Name<input
+            hlmInput
+            placeholder="eg. John"
+            type="firstname"
+            id="firstname"
+            autocomplete="off"
+            class="w-full"
+        /></label>
+        <label hlmLabel for="lastname"
+          >Last Name<input
+            hlmInput
+            placeholder="eg. Francisco"
+            type="lastname"
+            id="lastname"
+            autocomplete="off"
+            class="w-full"
+        /></label>
+      </div>
+      <label hlmLabel for="email"
+        >Email
+        <input
+          hlmInput
+          type="email"
+          id="email"
+          placeholder="eg. johnfrans@gmail.com"
+          autocomplete="off"
+          class="w-full"
+        />
+      </label>
+      <label hlmLabel for="passowrd">
+        Password
+        <input
+          hlmInput
+          placeholder="Enter your password"
+          type="password"
+          id="password"
+          autocomplete="off"
+          class="w-full"
+        />
+      </label>
+      <label hlmLabel for="confirm-password">
+        Confirm Password
+        <input
+          hlmInput
+          placeholder="Confirm  your password"
+          type="password"
+          id="confirm-password"
+          autocomplete="off"
+          class="w-full"
+        />
+      </label>
+      <button hlmBtn [disabled]="isLoading()" type="submit">
+        @if (isLoading()) {
+        <hlm-icon name="lucideLoader" size="sm" class="animate-spin" />
+        } Sign Up
+      </button>
+    </form>
+    <p class="text-muted-foreground sm:px-8 text-center text-sm">
+      Already have an account?
+      <a
+        class="hover:text-primary cursor-pointer underline underline-offset-4"
+        routerLink="/login"
+        >Sign in</a
+      >
+    </p>
+  </div>
+</div>
