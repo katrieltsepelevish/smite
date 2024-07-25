@@ -1,0 +1,35 @@
+<header
+  class="sticky top-0 z-10 flex justify-between h-[57px] items-center gap-1 border-b bg-background px-4"
+>
+  <h1 class="text-xl font-semibold">Playground</h1>
+  <button variant="link" [brnMenuTriggerFor]="profile">
+    <hlm-avatar variant="medium">
+      <img
+        src="https://ui.shadcn.com/avatars/01.png"
+        alt="Katriel Tsepelevish"
+        hlmAvatarImage
+      />
+      <span class="text-white bg-destructive" hlmAvatarFallback>RG</span>
+    </hlm-avatar>
+  </button>
+
+  <ng-template #profile>
+    <hlm-menu variant="menubar">
+      <div class="p-2 text-sm font-normal">
+        <div class="flex flex-col gap-2">
+          <p class="text-md font-medium leading-none">Katriel Tsepelevish</p>
+          <p class="text-xs leading-none text-muted-foreground">
+            katriel.tsepelevish&#64;gmail.com
+          </p>
+        </div>
+      </div>
+
+      <hlm-menu-separator />
+
+      <button hlmMenuItem hlmBtn>
+        <hlm-icon name="lucideLogOut" class="mr-2 size-4" />
+        <span>Logout</span>
+      </button>
+    </hlm-menu>
+  </ng-template>
+</header>
