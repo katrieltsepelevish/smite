@@ -10,7 +10,7 @@ import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 import { provideIcons } from '@ng-icons/core';
-import { lucideRefreshCw } from '@ng-icons/lucide';
+import { lucideToyBrick } from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-create-room',
@@ -25,7 +25,7 @@ import { lucideRefreshCw } from '@ng-icons/lucide';
     HlmInputDirective,
     HlmIconComponent,
   ],
-  providers: [provideIcons({ lucideRefreshCw })],
+  providers: [provideIcons({ lucideToyBrick })],
   templateUrl: './create-room.component.html',
 })
 export class CreateRoomComponent {}
