@@ -6,6 +6,7 @@ import {
   HlmCardHeaderDirective,
   HlmCardTitleDirective,
 } from '@spartan-ng/ui-card-helm';
+import { SmtButtonDirective } from '@smite/design-system';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { provideIcons } from '@ng-icons/core';
 import { lucideBook, lucideRefreshCw, lucideEllipsis } from '@ng-icons/lucide';
@@ -28,6 +29,7 @@ import { HlmBadgeDirective } from '@spartan-ng/ui-badge-helm';
     HlmSeparatorDirective,
     BrnSeparatorComponent,
     HlmBadgeDirective,
+    SmtButtonDirective,
   ],
   providers: [provideIcons({ lucideRefreshCw, lucideBook, lucideEllipsis })],
   templateUrl: './rooms-list.component.html',

@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { SmtButtonDirective } from '@smite/design-system';
 import { provideIcons } from '@ng-icons/core';
 import { lucideGithub, lucideLoader } from '@ng-icons/lucide';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
@@ -22,6 +23,7 @@ import { RouterLink } from '@angular/router';
     FormsModule,
     HlmLabelDirective,
     HlmCardDirective,
+    SmtButtonDirective,
   ],
   providers: [provideIcons({ lucideGithub, lucideLoader })],
   templateUrl: './login.component.html',

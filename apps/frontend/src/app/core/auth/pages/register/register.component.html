@@ -11,65 +11,124 @@
         Enter your personal data to create your account
       </p>
     </div>
-    <form (ngSubmit)="send()" class="flex flex-col gap-4">
+    <form
+      [formGroup]="registerForm"
+      (ngSubmit)="onSubmit()"
+      class="flex flex-col gap-4"
+    >
       <div class="flex gap-4">
-        <label hlmLabel for="firstname"
-          >First Name<input
-            hlmInput
-            placeholder="eg. John"
-            type="firstname"
-            id="firstname"
-            autocomplete="off"
-            class="w-full"
-        /></label>
-        <label hlmLabel for="lastname"
-          >Last Name<input
-            hlmInput
-            placeholder="eg. Francisco"
-            type="lastname"
-            id="lastname"
-            autocomplete="off"
-            class="w-full"
-        /></label>
+        <div>
+          <label hlmLabel for="firstname">First Name</label>
+          <hlm-form-field>
+            <input
+              hlmInput
+              formControlName="firstName"
+              aria-label="First Name"
+              placeholder="eg. John"
+              type="firstname"
+              id="firstname"
+              class="w-full"
+            />
+            <hlm-error *ngFor="let validation of validationMessages.firstName">
+              <small
+                *ngIf="
+                  registerForm?.get('firstName')?.hasError(validation.type)
+                "
+              >
+                {{ validation.message }}
+              </small>
+            </hlm-error>
+          </hlm-form-field>
+        </div>
+        <div>
+          <label hlmLabel for="lastname">Last Name</label>
+          <hlm-form-field>
+            <input
+              hlmInput
+              formControlName="lastName"
+              aria-label="Last Name"
+              placeholder="eg. Francisco"
+              type="lastname"
+              id="lastname"
+              class="w-full"
+            />
+            <hlm-error *ngFor="let validation of validationMessages.lastName">
+              <small
+                *ngIf="registerForm?.get('lastName')?.hasError(validation.type)"
+              >
+                {{ validation.message }}
+              </small>
+            </hlm-error>
+          </hlm-form-field>
+        </div>
       </div>
-      <label hlmLabel for="email"
-        >Email
+      <label hlmLabel for="email">Email</label>
+      <hlm-form-field>
         <input
           hlmInput
+          formControlName="email"
+          aria-label="email"
+          placeholder="eg. johnfrans@gmail.com"
           type="email"
           id="email"
-          placeholder="eg. johnfrans@gmail.com"
-          autocomplete="off"
           class="w-full"
         />
-      </label>
-      <label hlmLabel for="passowrd">
-        Password
+        <hlm-error *ngFor="let validation of validationMessages.email">
+          <small *ngIf="registerForm?.get('email')?.hasError(validation.type)">
+            {{ validation.message }}
+          </small>
+        </hlm-error>
+      </hlm-form-field>
+      <label hlmLabel for="passowrd">Password</label>
+      <hlm-form-field>
         <input
           hlmInput
+          formControlName="password"
+          aria-label="password"
           placeholder="Enter your password"
           type="password"
           id="password"
-          autocomplete="off"
           class="w-full"
         />
-      </label>
-      <label hlmLabel for="confirm-password">
-        Confirm Password
+        <hlm-error *ngFor="let validation of validationMessages.password">
+          <small
+            *ngIf="registerForm?.get('password')?.hasError(validation.type)"
+          >
+            {{ validation.message }}
+          </small>
+        </hlm-error>
+      </hlm-form-field>
+      <label hlmLabel for="confirm-password">Confirm Password</label>
+      <hlm-form-field>
         <input
           hlmInput
-          placeholder="Confirm  your password"
+          formControlName="confirmPassword"
+          aria-label="Confirm Password"
+          placeholder="Confirm your password"
           type="password"
+          [error]="registerForm.hasError('passwordNoMatch')"
           id="confirm-password"
-          autocomplete="off"
           class="w-full"
         />
-      </label>
-      <button hlmBtn [disabled]="isLoading()" type="submit">
-        @if (isLoading()) {
-        <hlm-icon name="lucideLoader" size="sm" class="animate-spin" />
-        } Sign Up
-      </button>
+        <hlm-error
+          *ngFor="let validation of validationMessages.confirmPassword"
+        >
+          <small
+            *ngIf="
+              registerForm?.get('confirmPassword')?.hasError(validation.type)
+            "
+          >
+            {{ validation.message }}
+          </small>
+        </hlm-error>
+        <div
+          class="text-destructive text-sm font-medium"
+          *ngIf="registerForm.hasError('passwordNoMatch')"
+        >
+          <small>{{ validationMessages.matchingPasswords[0].message }}</small>
+        </div>
+      </hlm-form-field>
+      <button smtBtn type="submit">Sign Up</button>
     </form>
     <p class="text-muted-foreground sm:px-8 text-center text-sm">
       Already have an account?

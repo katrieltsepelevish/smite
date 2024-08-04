@@ -1,4 +1,5 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { SmtButtonDirective } from '@smite/design-system';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { provideIcons } from '@ng-icons/core';
@@ -10,7 +11,12 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-theme-switcher',
   standalone: true,
-  imports: [CommonModule, HlmIconComponent, HlmButtonDirective],
+  imports: [
+    CommonModule,
+    HlmIconComponent,
+    HlmButtonDirective,
+    SmtButtonDirective,
+  ],
   providers: [ThemeSwitcherService, provideIcons({ lucideSun, lucideMoon })],
   templateUrl: './theme-switcher.component.html',
 })

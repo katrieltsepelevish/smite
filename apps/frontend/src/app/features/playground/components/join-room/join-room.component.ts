@@ -6,6 +6,7 @@ import {
   HlmCardHeaderDirective,
   HlmCardTitleDirective,
 } from '@spartan-ng/ui-card-helm';
+import { SmtButtonDirective } from '@smite/design-system';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 
@@ -20,6 +21,7 @@ import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
     HlmCardTitleDirective,
     HlmButtonDirective,
     HlmInputDirective,
+    SmtButtonDirective,
   ],
   providers: [],
   templateUrl: './join-room.component.html',
