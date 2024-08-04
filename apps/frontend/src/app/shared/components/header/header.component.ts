@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { lucideLogOut } from '@ng-icons/lucide';
 import { SmtButtonDirective } from '@smite/design-system';
-import { HlmSeparatorDirective } from '@spartan-ng/ui-separator-helm';
 import { BrnSeparatorComponent } from '@spartan-ng/ui-separator-brain';
 import {
   HlmMenuBarComponent,
@@ -21,7 +20,6 @@ import {
   selector: 'app-header',
   standalone: true,
   imports: [
-    HlmSeparatorDirective,
     BrnSeparatorComponent,
     HlmMenuBarComponent,
     HlmMenuItemDirective,
