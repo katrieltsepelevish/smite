@@ -27,7 +27,6 @@ export class SmtTooltipComponent implements OnInit, OnDestroy {
   private _overlayRef: OverlayRef | null = null;
   private _portal?: ComponentPortal<SmtTooltipContentComponent>;
   private _showTooltip = signal<boolean>(false);
-  private _tooltipInstance: SmtTooltipContentComponent | null = null;
 
   private readonly _label = signal<string>('');
   @Input({ required: true })
@@ -54,22 +53,16 @@ export class SmtTooltipComponent implements OnInit, OnDestroy {
   constructor() {
     effect(() => {
       if (this._overlayRef && this._portal) {
-        if (this._showTooltip()) {
-          const tooltipContent = this._overlayRef.attach(this._portal);
-          this._tooltipInstance = tooltipContent.instance;
-          if (this._tooltipInstance) {
-            this._tooltipInstance.label = this._label();
-          }
-        } else {
+        if (!this._showTooltip()) {
           this._overlayRef.detach();
+          return;
         }
-      }
-    });
 
-    effect(() => {
-      if (this._overlayRef && this._showTooltip()) {
-        this._updateTooltipContentLabel();
-        this._updateTooltipContentPosition();
+        const tooltipContent = this._overlayRef.attach(this._portal);
+        if (tooltipContent.instance) {
+          tooltipContent.instance.label = this._label();
+          this._updateTooltipContentPosition();
+        }
       }
     });
   }
@@ -154,11 +147,5 @@ export class SmtTooltipComponent implements OnInit, OnDestroy {
 
     positionStrategy.withPositions(this._getTooltipContentPosition());
     this._overlayRef.updatePositionStrategy(positionStrategy);
-  }
-
-  private _updateTooltipContentLabel(): void {
-    if (this._tooltipInstance) {
-      this._tooltipInstance.label = this._label();
-    }
   }
 }
