@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { SmtButtonDirective, SmtTooltipComponent } from '@smite/design-system';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
+import {
+  SmtButtonDirective,
+  SmtTooltipComponent,
+  SmtThemeSwitcherComponent,
+} from '@smite/design-system';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { provideIcons } from '@ng-icons/core';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { lucideZap, lucideBarChart, lucideTerminal } from '@ng-icons/lucide';
-import { ThemeSwitcherComponent } from '../theme-switcher/theme-switcher.component';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -12,8 +14,8 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [
     RouterLink,
-    ThemeSwitcherComponent,
-    HlmIconComponent,
+    SmtThemeSwitcherComponent,
+    NgIconComponent,
     HlmButtonDirective,
     SmtTooltipComponent,
     SmtButtonDirective,

@@ -1,22 +1,22 @@
 <aside class="inset-y fixed left-0 z-20 flex h-full flex-col border-r">
   <div class="border-b p-2">
     <a smtBtn routerLink="/" variant="outline" class="h-10 w-10 p-0">
-      <hlm-icon name="lucideZap" class="size-5" />
+      <ng-icon name="lucideZap" size="20" />
     </a>
   </div>
   <nav class="grid gap-1 p-2">
     <smt-tooltip position="right" label="Playground">
       <a smtBtn routerLink="/" variant="ghost" class="h-10 w-10 p-0 bg-muted">
-        <hlm-icon name="lucideTerminal" class="size-5" />
+        <ng-icon name="lucideTerminal" size="20" />
       </a>
     </smt-tooltip>
     <smt-tooltip position="right" label="Overview">
       <a smtBtn routerLink="/overview" variant="ghost" class="h-10 w-10 p-0">
-        <hlm-icon name="lucideBarChart" class="size-5" />
+        <ng-icon name="lucideBarChart" size="20" />
       </a>
     </smt-tooltip>
   </nav>
   <nav class="mt-auto grid gap-1 p-2">
-    <app-theme-switcher />
+    <smt-theme-switcher />
   </nav>
 </aside>

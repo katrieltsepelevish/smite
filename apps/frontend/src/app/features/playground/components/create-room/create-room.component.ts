@@ -9,8 +9,7 @@ import {
 import { SmtButtonDirective } from '@smite/design-system';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
-import { provideIcons } from '@ng-icons/core';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { lucideToyBrick } from '@ng-icons/lucide';
 
 @Component({
@@ -24,7 +23,7 @@ import { lucideToyBrick } from '@ng-icons/lucide';
     HlmCardTitleDirective,
     HlmButtonDirective,
     HlmInputDirective,
-    HlmIconComponent,
+    NgIconComponent,
     SmtButtonDirective,
   ],
   providers: [provideIcons({ lucideToyBrick })],

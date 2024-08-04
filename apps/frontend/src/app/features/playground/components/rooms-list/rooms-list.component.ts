@@ -8,9 +8,8 @@ import {
 } from '@spartan-ng/ui-card-helm';
 import { SmtButtonDirective } from '@smite/design-system';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { provideIcons } from '@ng-icons/core';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { lucideBook, lucideRefreshCw, lucideEllipsis } from '@ng-icons/lucide';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 import { HlmSeparatorDirective } from '@spartan-ng/ui-separator-helm';
 import { BrnSeparatorComponent } from '@spartan-ng/ui-separator-brain';
 import { HlmBadgeDirective } from '@spartan-ng/ui-badge-helm';
@@ -25,7 +24,7 @@ import { HlmBadgeDirective } from '@spartan-ng/ui-badge-helm';
     HlmCardHeaderDirective,
     HlmCardTitleDirective,
     HlmButtonDirective,
-    HlmIconComponent,
+    NgIconComponent,
     HlmSeparatorDirective,
     BrnSeparatorComponent,
     HlmBadgeDirective,

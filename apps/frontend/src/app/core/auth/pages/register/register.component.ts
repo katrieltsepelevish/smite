@@ -7,10 +7,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { SmtButtonDirective } from '@smite/design-system';
-import { provideIcons } from '@ng-icons/core';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { lucideGithub, lucideLoader } from '@ng-icons/lucide';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
 import { HlmSpinnerComponent } from '@spartan-ng/ui-spinner-helm';
@@ -29,7 +28,7 @@ import { PasswordValidator } from '../../validators/password.validator';
     ReactiveFormsModule,
     HlmFormFieldModule,
     HlmButtonDirective,
-    HlmIconComponent,
+    NgIconComponent,
     HlmInputDirective,
     HlmSpinnerComponent,
     FormsModule,

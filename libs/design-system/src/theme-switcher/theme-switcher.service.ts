@@ -13,7 +13,7 @@ export type DarkMode = (typeof DarkModes)[number];
 @Injectable({
   providedIn: 'root',
 })
-export class ThemeSwitcherService {
+export class SmtThemeSwitcherService {
   private _platformId = inject(PLATFORM_ID);
   private _renderer = inject(RendererFactory2).createRenderer(null, null);
   private _document = inject(DOCUMENT);

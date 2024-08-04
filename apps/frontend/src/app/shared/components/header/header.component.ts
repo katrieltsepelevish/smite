@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { provideIcons } from '@ng-icons/core';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { lucideLogOut } from '@ng-icons/lucide';
 import { SmtButtonDirective } from '@smite/design-system';
 import { HlmSeparatorDirective } from '@spartan-ng/ui-separator-helm';
@@ -16,7 +16,6 @@ import {
   HlmAvatarComponent,
   HlmAvatarFallbackDirective,
 } from '@spartan-ng/ui-avatar-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 
 @Component({
@@ -33,7 +32,7 @@ import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
     HlmAvatarImageDirective,
     HlmAvatarComponent,
     HlmAvatarFallbackDirective,
-    HlmIconComponent,
+    NgIconComponent,
     HlmButtonDirective,
     SmtButtonDirective,
   ],
