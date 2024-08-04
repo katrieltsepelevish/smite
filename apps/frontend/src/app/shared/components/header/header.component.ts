@@ -16,7 +16,6 @@ import {
   HlmAvatarComponent,
   HlmAvatarFallbackDirective,
 } from '@spartan-ng/ui-avatar-helm';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 
 @Component({
   selector: 'app-header',
@@ -33,7 +32,6 @@ import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
     HlmAvatarComponent,
     HlmAvatarFallbackDirective,
     NgIconComponent,
-    HlmButtonDirective,
     SmtButtonDirective,
   ],
   providers: [provideIcons({ lucideLogOut })],

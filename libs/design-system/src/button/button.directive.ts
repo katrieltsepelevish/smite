@@ -32,7 +32,7 @@ const buttonVariants = cva(
   }
 );
 
-type ButtonVariants = VariantProps<typeof buttonVariants>;
+export type ButtonVariants = VariantProps<typeof buttonVariants>;
 
 @Directive({
   selector: '[smtBtn]',

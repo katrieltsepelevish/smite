@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
+
 import {
-  HlmCardContentDirective,
-  HlmCardDescriptionDirective,
-  HlmCardDirective,
-  HlmCardHeaderDirective,
-  HlmCardTitleDirective,
-} from '@spartan-ng/ui-card-helm';
-import { SmtButtonDirective } from '@smite/design-system';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
+  SmtButtonDirective,
+  SmtCardComponent,
+  SmtCardContentComponent,
+  SmtCardHeaderComponent,
+  SmtCardSubtitleDirective,
+  SmtCardTitleDirective,
+} from '@smite/design-system';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { lucideToyBrick } from '@ng-icons/lucide';
@@ -16,15 +16,14 @@ import { lucideToyBrick } from '@ng-icons/lucide';
   selector: 'app-create-room',
   standalone: true,
   imports: [
-    HlmCardContentDirective,
-    HlmCardDescriptionDirective,
-    HlmCardDirective,
-    HlmCardHeaderDirective,
-    HlmCardTitleDirective,
-    HlmButtonDirective,
     HlmInputDirective,
     NgIconComponent,
     SmtButtonDirective,
+    SmtCardComponent,
+    SmtCardHeaderComponent,
+    SmtCardContentComponent,
+    SmtCardTitleDirective,
+    SmtCardSubtitleDirective,
   ],
   providers: [provideIcons({ lucideToyBrick })],
   templateUrl: './create-room.component.html',
