@@ -1,8 +1,21 @@
 import { Component, computed, input, Input, signal } from '@angular/core';
+import { cva, type VariantProps } from 'class-variance-authority';
 import clsx, { type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
-export type SeparatorOrientation = 'horizontal' | 'vertical';
+const separatorVariants = cva('inline-flex shrink-0 border-0 bg-border', {
+  variants: {
+    orientation: {
+      horizontal: 'h-[1px] w-full',
+      vertical: 'h-full w-[1px]',
+    },
+  },
+  defaultVariants: {
+    orientation: 'horizontal',
+  },
+});
+
+export type SeparatorVariants = VariantProps<typeof separatorVariants>;
 
 @Component({
   selector: 'smt-separator',
@@ -16,19 +29,17 @@ export type SeparatorOrientation = 'horizontal' | 'vertical';
 export class SmtSeparatorComponent {
   public readonly overrideClass = input<ClassValue>('', { alias: 'class' });
 
-  private readonly _orientation = signal<SeparatorOrientation>('horizontal');
+  private readonly _orientation =
+    signal<SeparatorVariants['orientation']>('horizontal');
   @Input()
-  set orientation(orientation: SeparatorOrientation) {
+  set orientation(orientation: SeparatorVariants['orientation']) {
     this._orientation.set(orientation);
   }
 
   protected _computedClass = computed(() =>
     twMerge(
       clsx(
-        'inline-flex shrink-0 border-0 bg-border',
-        this._orientation() === 'horizontal'
-          ? 'h-[1px] w-full'
-          : 'h-full w-[1px]',
+        separatorVariants({ orientation: this._orientation() }),
         this.overrideClass()
       )
     )

@@ -1,5 +1,5 @@
 import { Component, computed, Input, input, signal } from '@angular/core';
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 import clsx, { type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
