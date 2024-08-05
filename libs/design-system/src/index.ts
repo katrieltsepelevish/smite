@@ -6,3 +6,4 @@ export * from './separator';
 export * from './avatar';
 export * from './menu';
 export * from './popover';
+export * from './badge';

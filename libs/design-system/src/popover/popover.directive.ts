@@ -22,10 +22,15 @@ export type PopoverAlign = 'start' | 'center' | 'end';
 })
 export class SmtPopoverTriggerDirective implements OnInit, OnDestroy {
   private readonly _align = signal<PopoverAlign>('start');
-
   @Input()
   set align(value: PopoverAlign) {
     this._align.set(value);
+  }
+
+  private readonly _offset = signal<number>(5);
+  @Input()
+  set offset(offset: number) {
+    this._offset.set(offset);
   }
 
   @Input()
@@ -49,12 +54,14 @@ export class SmtPopoverTriggerDirective implements OnInit, OnDestroy {
             originY: 'bottom',
             overlayX: this._align(),
             overlayY: 'top',
+            offsetY: this._offset(),
           },
           {
             originX: this._align(),
             originY: 'top',
             overlayX: this._align(),
             overlayY: 'bottom',
+            offsetY: this._offset(),
           },
         ]),
       scrollStrategy: this._overlay.scrollStrategies.block(),

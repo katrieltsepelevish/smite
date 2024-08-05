@@ -11,13 +11,11 @@ import {
   SmtMenuItemComponent,
   SmtMenuSeparatorComponent,
 } from '@smite/design-system';
-import { BrnMenuTriggerDirective } from '@spartan-ng/ui-menu-brain';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
-    BrnMenuTriggerDirective,
     NgIconComponent,
     SmtButtonDirective,
     SmtAvatarComponent,
