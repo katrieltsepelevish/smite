@@ -6,29 +6,27 @@ import {
   SmtAvatarFallbackDirective,
   SmtAvatarImageDirective,
   SmtButtonDirective,
+  SmtPopoverTriggerDirective,
+  SmtMenuComponent,
+  SmtMenuItemComponent,
+  SmtMenuSeparatorComponent,
 } from '@smite/design-system';
-import {
-  HlmMenuBarComponent,
-  HlmMenuItemDirective,
-  HlmMenuComponent,
-  HlmMenuSeparatorComponent,
-} from '@spartan-ng/ui-menu-helm';
 import { BrnMenuTriggerDirective } from '@spartan-ng/ui-menu-brain';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
-    HlmMenuBarComponent,
-    HlmMenuItemDirective,
-    HlmMenuComponent,
-    HlmMenuSeparatorComponent,
     BrnMenuTriggerDirective,
     NgIconComponent,
     SmtButtonDirective,
     SmtAvatarComponent,
     SmtAvatarImageDirective,
     SmtAvatarFallbackDirective,
+    SmtPopoverTriggerDirective,
+    SmtMenuComponent,
+    SmtMenuItemComponent,
+    SmtMenuSeparatorComponent,
   ],
   providers: [provideIcons({ lucideLogOut })],
   templateUrl: './header.component.html',
