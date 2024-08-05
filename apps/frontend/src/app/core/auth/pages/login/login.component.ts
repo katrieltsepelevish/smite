@@ -5,7 +5,6 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { lucideGithub, lucideLoader } from '@ng-icons/lucide';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
-import { HlmSpinnerComponent } from '@spartan-ng/ui-spinner-helm';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -15,7 +14,6 @@ import { RouterLink } from '@angular/router';
     RouterLink,
     NgIconComponent,
     HlmInputDirective,
-    HlmSpinnerComponent,
     FormsModule,
     HlmLabelDirective,
     SmtButtonDirective,

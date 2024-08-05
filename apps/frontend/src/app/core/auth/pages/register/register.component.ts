@@ -11,7 +11,6 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { lucideGithub, lucideLoader } from '@ng-icons/lucide';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
-import { HlmSpinnerComponent } from '@spartan-ng/ui-spinner-helm';
 import { RouterLink } from '@angular/router';
 import { HlmFormFieldModule } from '@spartan-ng/ui-formfield-helm';
 import { CommonModule } from '@angular/common';
@@ -27,7 +26,6 @@ import { PasswordValidator } from '../../validators/password.validator';
     HlmFormFieldModule,
     NgIconComponent,
     HlmInputDirective,
-    HlmSpinnerComponent,
     FormsModule,
     HlmLabelDirective,
     SmtButtonDirective,
