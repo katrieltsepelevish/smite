@@ -7,3 +7,6 @@ export * from './avatar';
 export * from './menu';
 export * from './popover';
 export * from './badge';
+export * from './label';
+export * from './input';
+export * from './form-field';

@@ -54,7 +54,7 @@ export class SmtAvatarComponent {
 
   private readonly _size = signal<AvatarVariants['size']>('md');
   @Input()
-  set variant(size: AvatarVariants['size']) {
+  set size(size: AvatarVariants['size']) {
     this._size.set(size);
   }
 

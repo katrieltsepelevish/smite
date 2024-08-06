@@ -17,10 +17,10 @@
     >
       <div class="flex gap-4">
         <div>
-          <label hlmLabel for="firstname">First Name</label>
-          <hlm-form-field>
+          <smt-form-field>
+            <label smtLabel for="firstname">First Name</label>
             <input
-              hlmInput
+              smtInput
               formControlName="firstName"
               aria-label="First Name"
               placeholder="eg. John"
@@ -28,16 +28,9 @@
               id="firstname"
               class="w-full"
             />
-            <hlm-error *ngFor="let validation of validationMessages.firstName">
-              <small
-                *ngIf="
-                  registerForm?.get('firstName')?.hasError(validation.type)
-                "
-              >
-                {{ validation.message }}
-              </small>
-            </hlm-error>
-          </hlm-form-field>
+            <smt-input-error>First Name is required.</smt-input-error>
+            <!-- <smt-form-field-error *hasError="minLength">First Name must be at least 2 characters.</hlm-error> -->
+          </smt-form-field>
         </div>
         <div>
           <label hlmLabel for="lastname">Last Name</label>

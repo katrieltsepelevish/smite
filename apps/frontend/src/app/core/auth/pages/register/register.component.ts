@@ -6,7 +6,14 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { SmtButtonDirective, SmtCardComponent } from '@smite/design-system';
+import {
+  SmtButtonDirective,
+  SmtCardComponent,
+  SmtFormFieldComponent,
+  SmtInputDirective,
+  SmtInputErrorComponent,
+  SmtLabelDirective,
+} from '@smite/design-system';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { lucideGithub, lucideLoader } from '@ng-icons/lucide';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
@@ -30,6 +37,10 @@ import { PasswordValidator } from '../../validators/password.validator';
     HlmLabelDirective,
     SmtButtonDirective,
     SmtCardComponent,
+    SmtFormFieldComponent,
+    SmtInputDirective,
+    SmtInputErrorComponent,
+    SmtLabelDirective,
   ],
   providers: [provideIcons({ lucideGithub, lucideLoader })],
   templateUrl: './register.component.html',

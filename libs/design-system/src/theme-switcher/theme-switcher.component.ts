@@ -12,7 +12,14 @@ import { SmtButtonDirective } from '../button';
   standalone: true,
   imports: [CommonModule, NgIconComponent, SmtButtonDirective],
   providers: [SmtThemeSwitcherService, provideIcons({ lucideSun, lucideMoon })],
-  templateUrl: './theme-switcher.component.html',
+  template: ` <button
+    smtBtn
+    variant="ghost"
+    class="size-10 p-0"
+    (click)="toggleDarkMode()"
+  >
+    <ng-icon [name]="isDarkMode ? 'lucideMoon' : 'lucideSun'" size="20" />
+  </button>`,
 })
 export class SmtThemeSwitcherComponent implements OnInit, OnDestroy {
   private _themeService = inject(SmtThemeSwitcherService);
