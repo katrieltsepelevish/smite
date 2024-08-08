@@ -1,11 +1,5 @@
-import { Component, signal } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { Component, inject, signal } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   SmtButtonDirective,
   SmtCardComponent,
@@ -16,11 +10,9 @@ import {
 } from '@smite/design-system';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { lucideGithub, lucideLoader } from '@ng-icons/lucide';
-import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
-import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
 import { RouterLink } from '@angular/router';
-import { HlmFormFieldModule } from '@spartan-ng/ui-formfield-helm';
 import { CommonModule } from '@angular/common';
+
 import { PasswordValidator } from '../../validators/password.validator';
 
 @Component({
@@ -30,11 +22,7 @@ import { PasswordValidator } from '../../validators/password.validator';
     RouterLink,
     CommonModule,
     ReactiveFormsModule,
-    HlmFormFieldModule,
     NgIconComponent,
-    HlmInputDirective,
-    FormsModule,
-    HlmLabelDirective,
     SmtButtonDirective,
     SmtCardComponent,
     SmtFormFieldComponent,
@@ -46,92 +34,54 @@ import { PasswordValidator } from '../../validators/password.validator';
   templateUrl: './register.component.html',
 })
 export class RegisterComponent {
-  validationMessages = {
-    firstName: [
-      { type: 'required', message: 'First Name is required.' },
-      {
-        type: 'minlength',
-        message: 'First Name must be at least 2 characters long.',
-      },
-    ],
-    lastName: [
-      { type: 'required', message: 'Last Name is required.' },
-      {
-        type: 'minlength',
-        message: 'Last Name must be at least 2 characters long.',
-      },
-    ],
-    email: [
-      { type: 'required', message: 'Email is required.' },
-      {
-        type: 'email',
-        message: 'Email must be a valid email address.',
-      },
-    ],
-    password: [
-      { type: 'required', message: 'Password is required.' },
-      {
-        type: 'minlength',
-        message: 'Password must be at least 6 characters long.',
-      },
-    ],
-    confirmPassword: [
-      { type: 'required', message: 'Confirm Password is required.' },
-      {
-        type: 'minlength',
-        message: 'Confirm Password must be at least 6 characters long.',
-      },
-    ],
-    matchingPasswords: [
-      { type: 'passwordNoMatch', message: 'Passwords must match.' },
-    ],
-  };
+  public readonly isLoading = signal<boolean>(false);
+  public readonly submitted = signal<boolean>(false);
 
-  public registerForm = new FormGroup(
+  private readonly _formBuilder = inject(FormBuilder);
+
+  public readonly registerForm = this._formBuilder.group(
     {
-      firstName: new FormControl<string>(
-        '',
-        Validators.compose([Validators.required, Validators.minLength(2)])
-      ),
-      lastName: new FormControl<string>(
-        '',
-        Validators.compose([Validators.required, Validators.minLength(2)])
-      ),
-      email: new FormControl<string>(
-        '',
-        Validators.compose([Validators.required, Validators.email])
-      ),
-      password: new FormControl<string>(
-        '',
-        Validators.compose([Validators.required, Validators.minLength(6)])
-      ),
-      confirmPassword: new FormControl<string>(
-        '',
-        Validators.compose([Validators.required, Validators.minLength(6)])
-      ),
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      lastName: ['', [Validators.required, Validators.minLength(2)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
     },
-    { validators: PasswordValidator.confirmPassword }
+    { validators: PasswordValidator.mustMatch('password', 'confirmPassword') }
   );
 
-  // this._formBuilder.group(
-  //   {
-  //     firstName: ['', [Validators.required, Validators.minLength(2)]],
-  //     lastName: ['', [Validators.required, Validators.minLength(2)]],
-  //     email: ['', [Validators.required, Validators.email]],
-  //     password: ['', [Validators.required, Validators.minLength(6)]],
-  //     confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
-  //   },
-  //   { validator: equalsValidator(password, confirmPassword) }
-  // );
-
-  onSubmit() {
-    if (this.registerForm.invalid) return;
+  public get f() {
+    return this.registerForm.controls;
   }
 
-  // isLoading = signal(false);
+  public hasErrors(controlName: string): boolean {
+    const control = this.registerForm.get(controlName);
 
-  // send() {
-  //   this.isLoading.set(true);
-  //   setTimeout(() => this.isLoading.set(false), 3000);
-  // }
+    if (control) {
+      return control?.errors !== null && this.submitted();
+    }
+
+    return false;
+  }
+
+  public hasError(controlName: string, errorType: string): boolean {
+    const control = this.registerForm.get(controlName);
+
+    if (control) {
+      return control.hasError(errorType) && this.submitted();
+    }
+
+    return false;
+  }
+
+  onSubmit() {
+    this.submitted.set(true);
+
+    if (this.registerForm.invalid) {
+      return;
+    }
+
+    this.isLoading.set(true);
+    setTimeout(() => this.isLoading.set(false), 3000);
+  }
 }

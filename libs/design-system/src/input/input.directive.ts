@@ -1,19 +1,12 @@
 import {
   computed,
   Directive,
-  DoCheck,
-  effect,
   inject,
   input,
   Input,
   signal,
 } from '@angular/core';
-import {
-  AbstractControl,
-  FormGroupDirective,
-  NgControl,
-  NgForm,
-} from '@angular/forms';
+import { NgControl } from '@angular/forms';
 import { cva, type VariantProps } from 'class-variance-authority';
 import clsx, { ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -28,14 +21,18 @@ export const inputVariants = cva(
         lg: 'h-11 px-8',
       },
       error: {
-        auto: '[&.ng-invalid.ng-touched]:text-destructive [&.ng-invalid.ng-touched]:border-destructive [&.ng-invalid.ng-touched]:focus-visible:ring-destructive',
         true: 'text-destructive border-destructive focus-visible:ring-destructive',
+        false: '',
+      },
+      disabled: {
+        true: 'opacity-70',
         false: '',
       },
     },
     defaultVariants: {
       size: 'default',
-      error: 'auto',
+      error: false,
+      disabled: false,
     },
   }
 );
@@ -47,15 +44,27 @@ type InputVariants = VariantProps<typeof inputVariants>;
   standalone: true,
   host: {
     '[class]': '_computedClass()',
+    '[class.ng-invalid]': 'this._ngControl?.invalid || null',
+    '[class.ng-dirty]': 'this._ngControl?.dirty || null',
+    '[class.ng-valid]': 'this._ngControl?.valid || null',
+    '[class.ng-touched]': 'this._ngControl?.touched || null',
   },
 })
-export class SmtInputDirective implements DoCheck {
+export class SmtInputDirective {
+  protected readonly _ngControl = inject(NgControl, { optional: true });
+
   public readonly overrideClass = input<ClassValue>('', { alias: 'class' });
 
-  private readonly _error = signal<InputVariants['error']>('auto');
+  private readonly _error = signal<InputVariants['error']>(false);
   @Input()
   set error(error: InputVariants['error']) {
     this._error.set(error);
+  }
+
+  private readonly _disabled = signal<InputVariants['disabled']>(false);
+  @Input()
+  set disabled(disabled: InputVariants['disabled']) {
+    this._disabled.set(disabled);
   }
 
   private readonly _size = signal<InputVariants['size']>('default');
@@ -67,48 +76,13 @@ export class SmtInputDirective implements DoCheck {
   protected _computedClass = computed(() =>
     twMerge(
       clsx(
-        inputVariants({ error: this._error(), size: this._size() }),
+        inputVariants({
+          error: this._error(),
+          disabled: this._disabled(),
+          size: this._size(),
+        }),
         this.overrideClass()
       )
     )
   );
-
-  protected readonly _ngControl = inject(NgControl, { optional: true });
-  private readonly _parentForm = inject(NgForm, { optional: true });
-  private readonly _parentFormGroup = inject(FormGroupDirective, {
-    optional: true,
-  });
-  public readonly hasError = signal<boolean>(false);
-
-  constructor() {
-    effect(
-      () => {
-        if (this._ngControl) {
-          const isInvalid = this._isInvalidInput(this._ngControl.control);
-          this.hasError.set(isInvalid);
-          this._error.set(isInvalid);
-        }
-      },
-      { allowSignalWrites: true }
-    );
-  }
-
-  ngDoCheck() {
-    if (this._ngControl) {
-      const currentErrorState = this._isInvalidInput(this._ngControl.control);
-      if (this.hasError() !== currentErrorState) {
-        this.hasError.set(currentErrorState);
-        this._error.set(currentErrorState);
-      }
-    }
-  }
-
-  private _isInvalidInput(control: AbstractControl | null): boolean {
-    return !!(
-      control &&
-      control.invalid &&
-      (control.touched ||
-        (this._parentFormGroup || this._parentForm)?.submitted)
-    );
-  }
 }

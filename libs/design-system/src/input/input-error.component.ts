@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { type VariantProps, cva } from 'class-variance-authority';
+import { cva, VariantProps } from 'class-variance-authority';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -10,6 +10,7 @@ export const inputErrorVariants = cva(
     defaultVariants: {},
   }
 );
+
 export type InputErrorVariants = VariantProps<typeof inputErrorVariants>;
 
 @Component({

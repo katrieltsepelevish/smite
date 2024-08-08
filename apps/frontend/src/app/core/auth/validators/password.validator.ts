@@ -1,22 +1,30 @@
 import { AbstractControl, ValidatorFn } from '@angular/forms';
 
 export class PasswordValidator {
-  /**
-   * If our validation fails, we return an object with a key for the error name and a value of true.
-   * Otherwise, if the validation passes, we simply return null because there is no error.
-   */
-  static confirmPassword: ValidatorFn = (
-    formGroup: AbstractControl
-  ): { [key: string]: boolean } | null => {
-    const passwordControl = formGroup.get('password');
-    const confirmPasswordControl = formGroup.get('confirmPassword');
+  static mustMatch(
+    controlName: string,
+    matchingControlName: string
+  ): ValidatorFn {
+    return (group: AbstractControl) => {
+      const control = group.get(controlName);
+      const matchingControl = group.get(matchingControlName);
 
-    if (!passwordControl || !confirmPasswordControl) {
+      if (!control || !matchingControl) {
+        return null;
+      }
+
+      // return if another validator has already found an error on the matchingControl
+      if (matchingControl.errors && !matchingControl.errors['mustMatch']) {
+        return null;
+      }
+
+      // set error on matchingControl if validation fails
+      if (control.value !== matchingControl.value) {
+        matchingControl.setErrors({ mustMatch: true });
+      } else {
+        matchingControl.setErrors(null);
+      }
       return null;
-    }
-
-    const isEqual = passwordControl.value === confirmPasswordControl.value;
-
-    return !isEqual ? { passwordNoMatch: true } : null;
-  };
+    };
+  }
 }

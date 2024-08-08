@@ -10,28 +10,51 @@
         Enter your email and password to access your account
       </p>
     </div>
-    <form (ngSubmit)="send()" class="flex flex-col gap-4">
-      <label hlmLabel for="email"
-        >Email
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+      class="flex flex-col gap-4"
+    >
+      <smt-form-field>
+        <label smtLabel for="email">Email</label>
         <input
-          hlmInput
+          smtInput
+          formControlName="email"
+          aria-label="email"
+          placeholder="eg. johnfrans@gmail.com"
           type="email"
           id="email"
-          placeholder="Enter your email"
-          autocomplete="off"
           class="w-full"
+          [error]="hasErrors('email')"
         />
-      </label>
-      <label hlmLabel for="password"
-        >Password
+        <smt-input-error *ngIf="hasErrors('email')"
+          ><span *ngIf="hasError('email', 'required')">Email is required.</span
+          ><span *ngIf="hasError('email', 'email')"
+            >Email must be a valid email address.</span
+          ></smt-input-error
+        >
+      </smt-form-field>
+      <smt-form-field>
+        <label smtLabel for="passowrd">Password</label>
         <input
-          hlmInput
+          smtInput
+          formControlName="password"
+          aria-label="password"
           placeholder="Enter your password"
           type="password"
           id="password"
-          autocomplete="off"
           class="w-full"
-      /></label>
+          [error]="hasErrors('password')"
+        />
+        <smt-input-error *ngIf="hasErrors('password')">
+          <span *ngIf="hasError('password', 'required')"
+            >Password is required.</span
+          >
+          <span *ngIf="hasError('password', 'minlength')"
+            >Password must be at least 6 characters long.</span
+          >
+        </smt-input-error>
+      </smt-form-field>
       <button smtBtn [disabled]="isLoading()" type="submit">
         @if (isLoading()) {
         <ng-icon name="lucideLoader" class="animate-spin mr-2" size="16" />
