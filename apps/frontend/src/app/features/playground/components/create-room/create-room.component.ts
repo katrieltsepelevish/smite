@@ -8,7 +8,6 @@ import {
   SmtCardSubtitleDirective,
   SmtCardTitleDirective,
 } from '@smite/design-system';
-import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { lucideToyBrick } from '@ng-icons/lucide';
 
@@ -16,7 +15,6 @@ import { lucideToyBrick } from '@ng-icons/lucide';
   selector: 'app-create-room',
   standalone: true,
   imports: [
-    HlmInputDirective,
     NgIconComponent,
     SmtButtonDirective,
     SmtCardComponent,
