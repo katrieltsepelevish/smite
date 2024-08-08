@@ -8,7 +8,9 @@
     "build:backend": "nx run backend:build:production",
     "dev:web": "nx run-many --target=serve --projects=backend,frontend",
     "dev:frontend": "nx run frontend:serve:development",
-    "dev:backend": "nx run backend:serve:development"
+    "dev:backend": "nx run backend:serve:development",
+    "up": "bash start_services.sh",
+    "destory": "bash destory_services.sh"
   },
   "private": true,
   "dependencies": {

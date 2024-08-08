@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis
+    container_name: smite-redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/data
+
+  mongodb:
+    image: mongo
+    container_name: smite-mongodb
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGO_INITDB_DATABASE=smite
+    volumes:
+      - mongodb-data:/data/db
+
+volumes:
+  redis-data:
+  mongodb-data:
