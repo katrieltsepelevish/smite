@@ -119,12 +119,18 @@
           >
         </smt-input-error>
       </smt-form-field>
-      <button smtBtn [disabled]="isLoading()" type="submit">
-        @if (isLoading()) {
+      <button smtBtn [disabled]="isLoading$ | async" type="submit">
+        @if (isLoading$ | async) {
         <ng-icon name="lucideLoader" class="animate-spin mr-2" size="16" />
         } Sign Up
       </button>
     </form>
+    @if ((error$ | async); as error) {
+    <smt-alert variant="negative">
+      <ng-icon smtAlertIcon name="lucideShieldAlert" size="16" />
+      <h4 smtAlertTitle>{{ error }}</h4>
+    </smt-alert>
+    }
     <p class="text-muted-foreground sm:px-8 text-center text-sm">
       Already have an account?
       <a

@@ -49,6 +49,7 @@ export type AvatarVariants = VariantProps<typeof avatarVariants>;
 })
 export class SmtAvatarComponent {
   public readonly overrideClass = input<ClassValue>('', { alias: 'class' });
+
   @ContentChild(SmtAvatarImageDirective, { static: false })
   public image?: SmtAvatarImageDirective;
 

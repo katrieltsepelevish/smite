@@ -1,6 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
+  SmtAlertComponent,
+  SmtAlertDescriptionDirective,
+  SmtAlertIconDirective,
+  SmtAlertTitleDirective,
   SmtButtonDirective,
   SmtCardComponent,
   SmtFormFieldComponent,
@@ -9,11 +13,17 @@ import {
   SmtLabelDirective,
 } from '@smite/design-system';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { lucideGithub, lucideLoader } from '@ng-icons/lucide';
-import { RouterLink } from '@angular/router';
+import {
+  lucideGithub,
+  lucideLoader,
+  lucideShieldAlert,
+} from '@ng-icons/lucide';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { PasswordValidator } from '../../validators/password.validator';
+import { AuthService } from '../../auth.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -29,15 +39,23 @@ import { PasswordValidator } from '../../validators/password.validator';
     SmtInputDirective,
     SmtInputErrorComponent,
     SmtLabelDirective,
+    SmtAlertComponent,
+    SmtAlertIconDirective,
+    SmtAlertTitleDirective,
+    SmtAlertDescriptionDirective,
   ],
-  providers: [provideIcons({ lucideGithub, lucideLoader })],
+  providers: [provideIcons({ lucideGithub, lucideLoader, lucideShieldAlert })],
   templateUrl: './register.component.html',
 })
-export class RegisterComponent {
-  public readonly isLoading = signal<boolean>(false);
+export class RegisterComponent implements OnInit {
   public readonly submitted = signal<boolean>(false);
 
+  private readonly _authService = inject(AuthService);
   private readonly _formBuilder = inject(FormBuilder);
+  private readonly _router = inject(Router);
+
+  public isLoading$!: Observable<boolean>;
+  public error$!: Observable<string>;
 
   public readonly registerForm = this._formBuilder.group(
     {
@@ -50,8 +68,9 @@ export class RegisterComponent {
     { validators: PasswordValidator.mustMatch('password', 'confirmPassword') }
   );
 
-  public get f() {
-    return this.registerForm.controls;
+  ngOnInit(): void {
+    this.isLoading$ = this._authService.isLoading$;
+    this.error$ = this._authService.error$;
   }
 
   public hasErrors(controlName: string): boolean {
@@ -81,7 +100,15 @@ export class RegisterComponent {
       return;
     }
 
-    this.isLoading.set(true);
-    setTimeout(() => this.isLoading.set(false), 3000);
+    this._authService
+      .register({
+        firstName: this.registerForm.controls.firstName.value as string,
+        lastName: this.registerForm.controls.lastName.value as string,
+        email: this.registerForm.controls.email.value as string,
+        password: this.registerForm.controls.password.value as string,
+      })
+      .subscribe(() => {
+        this._router.navigateByUrl('/');
+      });
   }
 }

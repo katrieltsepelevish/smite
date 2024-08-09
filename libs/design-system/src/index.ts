@@ -10,3 +10,4 @@ export * from './badge';
 export * from './label';
 export * from './input';
 export * from './form-field';
+export * from './alert';
