@@ -1,7 +1,8 @@
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import cookieParser from 'cookie-parser';
+import { Logger } from 'nestjs-pino';
 import morgan from 'morgan';
 
 import { MainModule } from './main.module';
@@ -18,6 +19,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
+  app.useLogger(app.get(Logger));
 
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
@@ -25,10 +27,6 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get('PORT');
   await app.listen(port);
-
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
-  );
 }
 
 bootstrap();
