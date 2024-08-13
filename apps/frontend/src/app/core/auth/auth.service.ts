@@ -22,82 +22,85 @@ import { environment } from '../../../environments/environment.development';
 export class AuthService {
   private readonly _http = inject(HttpClient);
 
-  public readonly currentUser$ = new BehaviorSubject<User | null | undefined>(
+  private readonly _currentUser$ = new BehaviorSubject<User | null | undefined>(
     undefined
   );
-  public readonly isAuthenticated$ = this.currentUser$.pipe(
+  public readonly currentUser$ = this._currentUser$.asObservable();
+
+  public readonly isAuthenticated$ = this._currentUser$.pipe(
     filter((currentUser) => currentUser !== undefined),
     map(Boolean)
   );
-  private readonly isLoading = new BehaviorSubject<boolean>(false);
-  public isLoading$ = this.isLoading.asObservable();
 
-  private readonly error = new BehaviorSubject<string>('');
-  public error$ = this.error.asObservable();
+  private readonly _isLoading$ = new BehaviorSubject<boolean>(false);
+  public readonly isLoading$ = this._isLoading$.asObservable();
+
+  private readonly _error$ = new BehaviorSubject<string>('');
+  public readonly error$ = this._error$.asObservable();
 
   public login(payload: LoginPayload): Observable<AuthResponse | null> {
-    this.isLoading.next(true);
-    this.error.next('');
+    this._isLoading$.next(true);
+    this._error$.next('');
 
     return this._http
       .post<AuthResponse>(`${environment.apiUrl}/auth/login`, payload)
       .pipe(
         map((user) => {
-          this.currentUser$.next(user);
+          this._currentUser$.next(user);
           return user;
         }),
         catchError((err) => {
-          this.currentUser$.next(null);
-          this.error.next(err.error.message);
+          this._currentUser$.next(null);
+          this._error$.next(err.error.message);
           return of(null);
         }),
-        finalize(() => this.isLoading.next(false))
+        finalize(() => this._isLoading$.next(false))
       );
   }
 
   public register(payload: RegisterPayload): Observable<AuthResponse | null> {
-    this.isLoading.next(true);
-    this.error.next('');
+    this._isLoading$.next(true);
+    this._error$.next('');
 
     return this._http
       .post<AuthResponse>(`${environment.apiUrl}/auth/register`, payload)
       .pipe(
         map((user) => {
-          this.currentUser$.next(user);
+          this._currentUser$.next(user);
           return user;
         }),
         catchError((err) => {
-          this.currentUser$.next(null);
-          this.error.next(err.error.message);
+          this._currentUser$.next(null);
+          this._error$.next(err.error.message);
           return of(null);
         }),
-        finalize(() => this.isLoading.next(false))
+        finalize(() => this._isLoading$.next(false))
       );
   }
 
   public getCurrentUser(): Observable<AuthResponse | null> {
-    this.isLoading.next(true);
+    this._isLoading$.next(true);
 
     return this._http.get<AuthResponse>(`${environment.apiUrl}/auth/me`).pipe(
       map((user) => {
-        this.currentUser$.next(user);
+        this._currentUser$.next(user);
         return user;
       }),
       catchError(() => {
-        this.currentUser$.next(null);
+        this._currentUser$.next(null);
         return of(null);
       }),
-      finalize(() => this.isLoading.next(false))
+      finalize(() => this._isLoading$.next(false))
     );
   }
 
-  public logout(): Observable<object> {
-    this.isLoading.next(true);
+  public logout(): Observable<void> {
+    this._isLoading$.next(true);
 
-    return this._http.post(`${environment.apiUrl}/auth/logout`, {}).pipe(
+    return this._http.post<void>(`${environment.apiUrl}/auth/logout`, {}).pipe(
       finalize(() => {
-        this.currentUser$.next(null);
-        this.isLoading.next(false);
+        this._currentUser$.next(null);
+        this._isLoading$.next(false);
       })
     );
   }
