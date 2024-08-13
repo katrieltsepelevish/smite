@@ -58,13 +58,13 @@ export class RegisterComponent {
 
   public readonly registerForm = this._formBuilder.group(
     {
-      firstName: ['', [Validators.required, Validators.minLength(2)]],
-      lastName: ['', [Validators.required, Validators.minLength(2)]],
+      firstname: ['', [Validators.required, Validators.minLength(2)]],
+      lastname: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
     },
-    { validators: PasswordValidator.mustMatch('password', 'confirmPassword') }
+    { validators: PasswordValidator.mustMatch('password', 'confirmPassword') },
   );
 
   public hasErrors(controlName: string): boolean {
@@ -99,22 +99,22 @@ export class RegisterComponent {
 
     this._authService
       .register({
-        firstName: this.registerForm.controls.firstName.value as string,
-        lastName: this.registerForm.controls.lastName.value as string,
+        firstname: this.registerForm.controls.firstname.value as string,
+        lastname: this.registerForm.controls.lastname.value as string,
         email: this.registerForm.controls.email.value as string,
         password: this.registerForm.controls.password.value as string,
       })
       .pipe(
         finalize(() => {
           this.isLoading.set(false);
-        })
+        }),
       )
       .subscribe({
         next: () => {
           this._router.navigateByUrl('/');
         },
-        error: (err) => {
-          this.error.set(err);
+        error: ({ message }) => {
+          this.error.set(message);
         },
       });
   }

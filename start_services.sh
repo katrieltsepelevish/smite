@@ -2,7 +2,7 @@
 
 # Define volume names
 REDIS_VOLUME="smite-redis-data"
-MONGODB_VOLUME="smite-mongodb-data"
+POSTGRES_VOLUME="smite-postgres-data"
 
 # Check if Docker is installed
 if ! command -v docker &> /dev/null; then
@@ -11,7 +11,7 @@ if ! command -v docker &> /dev/null; then
 fi
 
 # Create Docker volumes if they don't exist
-for volume in "$REDIS_VOLUME" "$MONGODB_VOLUME"; do
+for volume in "$REDIS_VOLUME" "$POSTGRES_VOLUME"; do
     if ! docker volume ls --quiet | grep -q "$volume"; then
         echo "Creating Docker volume: $volume"
         docker volume create "$volume"
@@ -19,16 +19,18 @@ for volume in "$REDIS_VOLUME" "$MONGODB_VOLUME"; do
 done
 
 # Start Redis container
-echo "Starts Redis container with volume for data persistence..."
+echo "Starting Redis container with volume for data persistence..."
 docker run -d --name smite-redis -p 6379:6379 -v "$REDIS_VOLUME":/data redis
 
-# Start MongoDB container
-echo "Starts MongoDB container with volume for data persistence..."
-docker run -d --name smite-mongodb \
-    -p 27017:27017 \
-    -v "$MONGODB_VOLUME":/data/db \
-    -e MONGO_INITDB_DATABASE=smite \
-    mongo
+# Start PostgreSQL container
+echo "Starting PostgreSQL container with volume for data persistence..."
+docker run -d --name smite-postgres \
+    -p 5432:5432 \
+    -v "$POSTGRES_VOLUME":/var/lib/postgresql/data \
+    -e POSTGRES_USER=root \
+    -e POSTGRES_PASSWORD=password \
+    -e POSTGRES_DB=smite \
+    postgres
 
 # List running containers
 echo "Running containers:"

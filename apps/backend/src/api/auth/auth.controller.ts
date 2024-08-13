@@ -11,17 +11,17 @@ import {
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
-
-import { UserDocument } from '../users/user.schema';
-import { AuthService } from './auth.service';
-import { RegisterRequestDto } from './dto/register-request.dto';
 import { ConfigService } from '@nestjs/config';
+
+import { AuthService } from './auth.service';
 import { DomainUtil } from './utils/domain.util';
 import { JwtGuard } from './guards/jwt.gaurd';
 import { Public } from './decorators/public.decorator';
-import { User } from './decorators/user.decorator';
+import { CurrentUser } from './decorators/current-user.decorator';
 import { AccessTokenPayload } from './interfaces/access-token-payload.interface';
 import { UserUtil } from './utils/user.util';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { User } from '../users/user.entity';
 
 @Controller('/auth')
 export class AuthController {
@@ -35,16 +35,16 @@ export class AuthController {
   @Post('/register')
   @HttpCode(HttpStatus.CREATED)
   async register(
-    @Body() registerRequestDto: RegisterRequestDto,
+    @Body() createUserDto: CreateUserDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const user = await this._authService.register(registerRequestDto);
+    const user = await this._authService.register(createUserDto);
 
     const domain: string = this._configService.getOrThrow('FRONTEND_URL');
     const domainAttributes = DomainUtil.getAttributes(domain);
 
     const tokenPayload: AccessTokenPayload = {
-      userId: user._id.toHexString(),
+      userId: user.id,
     };
 
     const expires = new Date();
@@ -70,11 +70,11 @@ export class AuthController {
   @Post('/login')
   @HttpCode(HttpStatus.OK)
   async login(
-    @User() user: UserDocument,
+    @CurrentUser() user: User,
     @Res({ passthrough: true }) res: Response,
   ) {
     const tokenPayload: AccessTokenPayload = {
-      userId: user._id.toHexString(),
+      userId: user.id,
     };
 
     const expires = new Date();
@@ -117,7 +117,7 @@ export class AuthController {
   @Get('/me')
   @UseGuards(JwtGuard)
   @HttpCode(HttpStatus.OK)
-  async getUser(@User() user: UserDocument) {
+  async getUser(@CurrentUser() user: User) {
     return UserUtil.normalizeUser(user);
   }
 }

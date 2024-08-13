@@ -1,22 +1,23 @@
 <smt-card class="w-80 bg-background">
   <smt-card-header>
-    <h3 smtCardTitle>Join Room</h3>
+    <h3 smtCardTitle>Join Whiteboard</h3>
     <p smtCardSubtitle>
-      Enter a room code to seamlessly join an existing collaborative whiteboard
-      session with others.
+      Enter a whiteboard token to seamlessly join an existing collaborative
+      whiteboard session with others.
     </p>
   </smt-card-header>
   <smt-card-content>
-    <form [formGroup]="joinRoomForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="joinWhiteboardForm" (ngSubmit)="onSubmit()">
       <div class="flex items-center w-full max-w-sm space-x-2">
         <input
           class="w-full"
           smtInput
-          formControlName="roomId"
+          formControlName="whiteboardId"
+          placeholder="ex. zpwVcONXq"
           type="text"
-          placeholder="Room identifier"
           [error]="
-            (joinRoomForm.controls.roomId.invalid || hasError()) && submitted()
+            (joinWhiteboardForm.controls.whiteboardId.invalid || hasError()) &&
+            submitted()
           "
         />
         <button smtBtn [disabled]="isLoading()" type="submit">Join</button>

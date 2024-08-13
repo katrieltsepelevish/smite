@@ -5,18 +5,17 @@ import {
 } from '@nestjs/common';
 import * as Bcrypt from 'bcrypt';
 
-import { UserDocument } from '../users/user.schema';
 import { UsersService } from '../users/users.service';
-import { RegisterRequestDto } from './dto/register-request.dto';
 import { CreateUserDto } from '../users/dto/create-user.dto';
+import { User } from '../users/user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly _usersService: UsersService) {}
 
-  async validateUser(email: string, password: string): Promise<UserDocument> {
+  async validateUser(email: string, password: string): Promise<User> {
     try {
-      const user: UserDocument = await this._usersService.findOneByEmail(email);
+      const user: User = await this._usersService.findByEmail(email);
 
       const isMatch: boolean = Bcrypt.compareSync(password, user.password);
       if (!isMatch) {
@@ -29,19 +28,19 @@ export class AuthService {
     }
   }
 
-  async register(user: RegisterRequestDto): Promise<UserDocument> {
+  async register(user: CreateUserDto): Promise<User> {
     await this._validateCreateUser(user);
 
     const hashedPassword = await Bcrypt.hash(user.password, 10);
     const newUser: CreateUserDto = { ...user, password: hashedPassword };
-    const createdUser: UserDocument = await this._usersService.create(newUser);
+    const createdUser: User = await this._usersService.createUser(newUser);
 
     return createdUser;
   }
 
-  private async _validateCreateUser(user: RegisterRequestDto) {
+  private async _validateCreateUser(user: CreateUserDto) {
     try {
-      await this._usersService.findOneByEmail(user.email);
+      await this._usersService.findByEmail(user.email);
     } catch (err) {
       return;
     }

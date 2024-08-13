@@ -13,9 +13,11 @@ import { DatabaseModule, LoggerModule } from './common';
       validationSchema: Joi.object({
         PORT: Joi.number().required().port().default(3000),
         REDIS_URI: Joi.string().required().default('redis://localhost:6379'),
-        MONGODB_URI: Joi.string()
-          .required()
-          .default('mongodb://localhost:27017/smite'),
+        DATABASE_HOST: Joi.string().required(),
+        DATABASE_PORT: Joi.number().required(),
+        DATABASE_USERNAME: Joi.string().required(),
+        DATABASE_PASSWORD: Joi.string().required(),
+        DATABASE_NAME: Joi.string().required(),
         FRONTEND_URL: Joi.string().required().default('http://localhost:4200'),
         JWT_SECRET: Joi.string().required(),
         JWT_EXPIRATION: Joi.number().required().default(3600),

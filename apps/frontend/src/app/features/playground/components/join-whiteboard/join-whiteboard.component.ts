@@ -15,12 +15,12 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { RoomsService } from '../../../../shared/services/rooms.service';
+import { WhiteboardsService } from '../../../../shared/services/whiteboards.service';
 import { finalize } from 'rxjs';
 import { toast } from 'ngx-sonner';
 
 @Component({
-  selector: 'app-join-room',
+  selector: 'app-join-whiteboard',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -33,31 +33,33 @@ import { toast } from 'ngx-sonner';
     SmtInputDirective,
   ],
   providers: [],
-  templateUrl: './join-room.component.html',
+  templateUrl: './join-whiteboard.component.html',
 })
-export class JoinRoomComponent {
-  private readonly _roomsService = inject(RoomsService);
+export class JoinWhiteboardComponent {
+  private readonly _whiteboardsService = inject(WhiteboardsService);
 
   public readonly submitted = signal<boolean>(false);
   public readonly isLoading = signal<boolean>(false);
   public readonly hasError = signal<boolean>(false);
 
-  public readonly joinRoomForm = new FormGroup({
-    roomId: new FormControl('', Validators.required),
+  public readonly joinWhiteboardForm = new FormGroup({
+    whiteboardId: new FormControl('', Validators.required),
   });
 
   public onSubmit(): void {
     this.submitted.set(true);
 
-    if (this.joinRoomForm.invalid) {
+    if (this.joinWhiteboardForm.invalid) {
       return;
     }
 
     this.isLoading.set(true);
     this.hasError.set(false);
 
-    this._roomsService
-      .joinRoom(this.joinRoomForm.controls.roomId.value as string)
+    this._whiteboardsService
+      .joinWhiteboard(
+        this.joinWhiteboardForm.controls.whiteboardId.value as string,
+      )
       .pipe(
         finalize(() => {
           this.isLoading.set(false);
@@ -65,10 +67,10 @@ export class JoinRoomComponent {
       )
       .subscribe({
         next: () => {
-          toast.success('Joined the room successfully');
+          toast.success('Joined the whiteboard successfully');
         },
-        error: () => {
-          toast.error('Failed to join the room');
+        error: ({ message }) => {
+          toast.error(message);
           this.hasError.set(true);
         },
       });

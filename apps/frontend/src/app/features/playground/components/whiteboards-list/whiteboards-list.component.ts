@@ -28,13 +28,12 @@ import {
 import { finalize } from 'rxjs';
 import { CommonModule } from '@angular/common';
 
-import { RoomsService } from '../../../../shared/services/rooms.service';
+import { WhiteboardsService } from '../../../../shared/services/whiteboards.service';
 import { RelativeTimePipe } from '../../../../shared/pipes/relative-time.pipe';
-import { ShortenIdPipe } from '../../../../shared/pipes/shorten-id-pipe';
 import { ClipboardService } from '../../../../shared/services/clipboard.service';
 
 @Component({
-  selector: 'app-rooms-list',
+  selector: 'app-whiteboards-list',
   standalone: true,
   imports: [
     CommonModule,
@@ -48,7 +47,6 @@ import { ClipboardService } from '../../../../shared/services/clipboard.service'
     SmtCardSubtitleDirective,
     SmtSeparatorComponent,
     RelativeTimePipe,
-    ShortenIdPipe,
   ],
   providers: [
     provideIcons({
@@ -59,26 +57,28 @@ import { ClipboardService } from '../../../../shared/services/clipboard.service'
       lucideEllipsis,
     }),
   ],
-  templateUrl: './rooms-list.component.html',
+  templateUrl: './whiteboards-list.component.html',
 })
-export class RoomsListComponent implements OnInit {
-  private readonly _roomsService = inject(RoomsService);
+export class WhiteboardsListComponent implements OnInit {
+  private readonly _whiteboardsService = inject(WhiteboardsService);
   private readonly _clipboardService = inject(ClipboardService);
   private readonly _destoryRef = inject(DestroyRef);
 
-  public readonly rooms = computed(() => this._roomsService.rooms());
+  public readonly whiteboards = computed(() =>
+    this._whiteboardsService.whiteboard(),
+  );
   public readonly isLoading = signal<boolean>(true);
   public readonly isRefreshing = signal<boolean>(false);
 
   ngOnInit(): void {
-    this._loadUserRooms();
+    this._loadUserWhiteboards();
   }
 
-  private _loadUserRooms(): void {
+  private _loadUserWhiteboards(): void {
     this.isLoading.set(true);
 
-    this._roomsService
-      .getUserRooms()
+    this._whiteboardsService
+      .getUserWhiteboards()
       .pipe(
         takeUntilDestroyed(this._destoryRef),
         finalize(() => {
@@ -89,9 +89,9 @@ export class RoomsListComponent implements OnInit {
       .subscribe();
   }
 
-  public refreshRooms(): void {
+  public refreshWhiteboards(): void {
     this.isRefreshing.set(true);
-    this._loadUserRooms();
+    this._loadUserWhiteboards();
   }
 
   public copyToClipboard(text: string): void {

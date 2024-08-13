@@ -13,10 +13,10 @@ import { finalize } from 'rxjs';
 import { toast } from 'ngx-sonner';
 import moment from 'moment';
 
-import { RoomsService } from '../../../../shared/services/rooms.service';
+import { WhiteboardsService } from '../../../../shared/services/whiteboards.service';
 
 @Component({
-  selector: 'app-create-room',
+  selector: 'app-create-whiteboard',
   standalone: true,
   imports: [
     NgIconComponent,
@@ -28,21 +28,21 @@ import { RoomsService } from '../../../../shared/services/rooms.service';
     SmtCardSubtitleDirective,
   ],
   providers: [provideIcons({ lucideToyBrick, lucideLoader })],
-  templateUrl: './create-room.component.html',
+  templateUrl: './create-whiteboard.component.html',
 })
-export class CreateRoomComponent {
-  private readonly _roomsService = inject(RoomsService);
+export class CreateWhiteboardComponent {
+  private readonly _whiteboardsService = inject(WhiteboardsService);
 
   public readonly isLoading = signal<boolean>(false);
 
-  public createRoom(): void {
+  public createWhiteboard(): void {
     this.isLoading.set(true);
 
-    this._roomsService
-      .createRoom()
+    this._whiteboardsService
+      .createWhiteboard()
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe(({ createdAt }) => {
-        toast('Room has been created', {
+        toast('Whiteboard has been created', {
           description: moment(createdAt).format('dddd, MMMM Do [at] h:mma'),
         });
       });

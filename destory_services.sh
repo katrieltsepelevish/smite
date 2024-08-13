@@ -2,14 +2,14 @@
 
 # Define container names and volume names
 REDIS_CONTAINER="smite-redis"
-MONGODB_CONTAINER="smite-mongodb"
+POSTGRES_CONTAINER="smite-postgres"
 REDIS_VOLUME="smite-redis-data"
-MONGODB_VOLUME="smite-mongodb-data"
+POSTGRES_VOLUME="smite-postgres-data"
 
 # Stop and remove containers
-echo "Stops and removes MongoDB and Redis container..."
-docker stop "$MONGODB_CONTAINER"
-docker rm "$MONGODB_CONTAINER"
+echo "Stopping and removing Redis and PostgreSQL containers..."
+docker stop "$POSTGRES_CONTAINER"
+docker rm "$POSTGRES_CONTAINER"
 docker stop "$REDIS_CONTAINER"
 docker rm "$REDIS_CONTAINER"
 
@@ -18,8 +18,8 @@ echo "Running containers:"
 docker ps
 
 # Remove Docker volumes
-echo "Removes MongoDB and Redis volume..."
-docker volume rm "$MONGODB_VOLUME"
+echo "Removing PostgreSQL and Redis volumes..."
+docker volume rm "$POSTGRES_VOLUME"
 docker volume rm "$REDIS_VOLUME"
 
 # Verify that volumes are removed

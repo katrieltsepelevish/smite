@@ -97,14 +97,14 @@ export class LoginComponent {
       .pipe(
         finalize(() => {
           this.isLoading.set(false);
-        })
+        }),
       )
       .subscribe({
         next: () => {
           this._router.navigate(['/']);
         },
-        error: (err) => {
-          this.error.set(err);
+        error: ({ message }) => {
+          this.error.set(message);
         },
       });
   }

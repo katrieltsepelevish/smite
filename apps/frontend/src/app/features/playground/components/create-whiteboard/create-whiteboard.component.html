@@ -1,9 +1,9 @@
 <smt-card class="w-80 bg-background">
   <smt-card-header>
-    <h3 smtCardTitle>Create Room</h3>
+    <h3 smtCardTitle>Create Whiteboard</h3>
     <p smtCardSubtitle>
       Instantly start a collaborative whiteboard session with others by
-      generating a new room.
+      generating a new whiteboard.
     </p>
   </smt-card-header>
   <smt-card-content>
@@ -11,14 +11,14 @@
       smtBtn
       class="w-full flex gap-2"
       [disabled]="isLoading()"
-      (click)="createRoom()"
+      (click)="createWhiteboard()"
     >
       @if (isLoading()) {
         <ng-icon name="lucideLoader" class="animate-spin" size="16" />
       } @else {
         <ng-icon name="lucideToyBrick" size="20" />
       }
-      <span>Create room</span>
+      <span>Create Whiteboard</span>
     </button>
   </smt-card-content>
 </smt-card>

@@ -1,11 +1,11 @@
-import { UserDocument } from '../../users/user.schema';
+import { User } from '../../users/user.entity';
 
 export class UserUtil {
-  static normalizeUser(user: UserDocument) {
+  static normalizeUser(user: User) {
     return {
-      id: user._id,
-      firstName: user.firstName,
-      lastName: user.lastName,
+      id: user.id,
+      firstname: user.firstname,
+      lastname: user.lastname,
       email: user.email,
     };
   }

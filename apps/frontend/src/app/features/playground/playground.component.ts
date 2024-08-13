@@ -1,21 +1,21 @@
 import { Component } from '@angular/core';
 
 import { LayoutComponent } from '../../core/layout/layout.component';
-import { CreateRoomComponent } from './components/create-room/create-room.component';
-import { JoinRoomComponent } from './components/join-room/join-room.component';
-import { RoomsListComponent } from './components/rooms-list/rooms-list.component';
-import { RoomsService } from '../../shared/services/rooms.service';
+import { CreateWhiteboardComponent } from './components/create-whiteboard/create-whiteboard.component';
+import { JoinWhiteboardComponent } from './components/join-whiteboard/join-whiteboard.component';
+import { WhiteboardsListComponent } from './components/whiteboards-list/whiteboards-list.component';
+import { WhiteboardsService } from '../../shared/services/whiteboards.service';
 
 @Component({
   selector: 'app-playground',
   standalone: true,
   imports: [
     LayoutComponent,
-    CreateRoomComponent,
-    JoinRoomComponent,
-    RoomsListComponent,
+    CreateWhiteboardComponent,
+    JoinWhiteboardComponent,
+    WhiteboardsListComponent,
   ],
-  providers: [RoomsService],
+  providers: [WhiteboardsService],
   templateUrl: './playground.component.html',
 })
 export class PlaygroundComponent {}

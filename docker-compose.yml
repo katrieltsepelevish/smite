@@ -9,16 +9,18 @@ services:
     volumes:
       - redis-data:/data
 
-  mongodb:
-    image: mongo
-    container_name: smite-mongodb
+  postgres:
+    image: postgres
+    container_name: smite-postgres
     ports:
-      - '27017:27017'
+      - '5432:5432'
     environment:
-      - MONGO_INITDB_DATABASE=smite
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=smite
     volumes:
-      - mongodb-data:/data/db
+      - postgres-data:/var/lib/postgresql/data
 
 volumes:
   redis-data:
-  mongodb-data:
+  postgres-data:

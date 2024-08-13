@@ -19,18 +19,18 @@
         <label smtLabel for="firstname">First Name</label>
         <input
           smtInput
-          formControlName="firstName"
+          formControlName="firstname"
           aria-label="First Name"
           placeholder="eg. John"
           id="firstname"
           class="w-full"
-          [error]="hasErrors('firstName')"
+          [error]="hasErrors('firstname')"
         />
-        <smt-input-error *ngIf="hasErrors('firstName')">
-          <span *ngIf="hasError('firstName', 'required')">
+        <smt-input-error *ngIf="hasErrors('firstname')">
+          <span *ngIf="hasError('firstname', 'required')">
             First Name is required.
           </span>
-          <span *ngIf="hasError('firstName', 'minlength')">
+          <span *ngIf="hasError('firstname', 'minlength')">
             First Name must be at least 2 characters long.
           </span>
         </smt-input-error>
@@ -39,18 +39,18 @@
         <label smtLabel for="lastname">Last Name</label>
         <input
           smtInput
-          formControlName="lastName"
+          formControlName="lastname"
           aria-label="Last Name"
           placeholder="eg. Francisco"
           id="lastname"
           class="w-full"
-          [error]="hasErrors('lastName')"
+          [error]="hasErrors('lastname')"
         />
-        <smt-input-error *ngIf="hasErrors('lastName')">
-          <span *ngIf="hasError('lastName', 'required')">
+        <smt-input-error *ngIf="hasErrors('lastname')">
+          <span *ngIf="hasError('lastname', 'required')">
             First Name is required.
           </span>
-          <span *ngIf="hasError('lastName', 'minlength')">
+          <span *ngIf="hasError('lastname', 'minlength')">
             First Name must be at least 2 characters long.
           </span>
         </smt-input-error>

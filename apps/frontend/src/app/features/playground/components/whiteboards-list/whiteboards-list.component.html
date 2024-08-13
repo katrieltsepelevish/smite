@@ -1,7 +1,7 @@
 <smt-card class="w-full bg-background">
   <smt-card-header class="flex flex-row justify-between">
     <div>
-      <h3 smtCardTitle class="text-2xl">Rooms</h3>
+      <h3 smtCardTitle class="text-2xl">Whiteboards</h3>
       <p smtCardSubtitle>
         Manage and revisit your ongoing collaborative whiteboard sessions for
         continued teamwork and productivity.
@@ -11,7 +11,7 @@
       smtBtn
       class="flex gap-2"
       [disabled]="isRefreshing() || isLoading()"
-      (click)="refreshRooms()"
+      (click)="refreshWhiteboards()"
     >
       <ng-icon
         size="16"
@@ -27,22 +27,22 @@
         <ng-icon name="lucideLoader" class="animate-spin mr-2" size="21" />
       </div>
     } @else {
-      @for (room of rooms(); track room._id) {
+      @for (whiteboard of whiteboards(); track whiteboard.id) {
         <div class="flex flex-1 items-center gap-4">
           <ng-icon class="mr-2 text-black" size="32" name="lucideBook" />
           <div class="flex flex-col min-w-28">
-            <span>{{ room.name }}</span>
+            <span>{{ whiteboard.name }}</span>
             <small class="text-muted-foreground text-xs">
-              {{ room.createdAt | relativeTime }}
+              {{ whiteboard.createdAt | relativeTime }}
             </small>
           </div>
           <div smtBadge variant="secondary" class="flex gap-2">
-            {{ room._id | shortenId }}
+            {{ whiteboard.token }}
             <button
               smtBtn
               variant="ghost"
               class="p-0 h-auto"
-              (click)="copyToClipboard(room._id)"
+              (click)="copyToClipboard(whiteboard.token)"
             >
               <ng-icon class="text-black" size="12" name="lucideCopy" />
             </button>
