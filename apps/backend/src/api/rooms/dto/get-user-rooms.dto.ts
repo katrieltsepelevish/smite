@@ -1,8 +1,8 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsMongoId, IsNotEmpty } from 'class-validator';
 import { Types } from 'mongoose';
 
 export class GetUserRoomsDto {
-  @IsString()
+  @IsMongoId()
   @IsNotEmpty()
   userId: Types.ObjectId;
 }

@@ -1,8 +1,8 @@
 import { IsMongoId, IsNotEmpty } from 'class-validator';
 import { Types } from 'mongoose';
 
-export class CreateRoomDto {
+export class JoinRoomRequestDto {
   @IsMongoId()
   @IsNotEmpty()
-  userId: Types.ObjectId;
+  roomId: Types.ObjectId;
 }

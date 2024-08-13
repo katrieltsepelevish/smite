@@ -1,7 +1,8 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsMongoId, IsNotEmpty } from 'class-validator';
+import { Types } from 'mongoose';
 
 export class GetUserDto {
-  @IsString()
+  @IsMongoId()
   @IsNotEmpty()
-  _id: string;
+  _id: Types.ObjectId;
 }

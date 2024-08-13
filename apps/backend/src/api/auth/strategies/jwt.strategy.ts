@@ -5,12 +5,13 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { AccessTokenPayload } from '../interfaces/access-token-payload.interface';
 import { UsersService } from '../../users/users.service';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     private readonly _configService: ConfigService,
-    private readonly _userService: UsersService
+    private readonly _userService: UsersService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
@@ -23,6 +24,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate({ userId }: AccessTokenPayload) {
-    return this._userService.getUser({ _id: userId });
+    const _id = new mongoose.Types.ObjectId(userId);
+
+    return this._userService.getUser({ _id });
   }
 }

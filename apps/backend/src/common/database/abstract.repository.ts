@@ -1,17 +1,21 @@
-import { Logger, NotFoundException } from '@nestjs/common';
-import { FilterQuery, Model, Types, UpdateQuery, SaveOptions } from 'mongoose';
+import {
+  FilterQuery,
+  Model,
+  Types,
+  UpdateQuery,
+  SaveOptions,
+  PopulateOptions,
+} from 'mongoose';
 import { AbstractDocument } from './abstract.schema';
 
 export abstract class AbstractRepository<TDocument extends AbstractDocument> {
-  protected abstract readonly _logger: Logger;
-
-  constructor(protected readonly model: Model<TDocument>) {}
+  constructor(protected readonly _model: Model<TDocument>) {}
 
   async create(
     document: Omit<TDocument, '_id'>,
-    options?: SaveOptions
+    options?: SaveOptions,
   ): Promise<TDocument> {
-    const createdDocument = new this.model({
+    const createdDocument = new this._model({
       ...document,
       _id: new Types.ObjectId(),
     });
@@ -20,35 +24,43 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     ).toJSON() as unknown as TDocument;
   }
 
-  async findOne(filterQuery: FilterQuery<TDocument>): Promise<TDocument> {
-    const document = await this.model.findOne(filterQuery, {}, { lean: true });
-
-    if (!document) {
-      this._logger.warn('Document not found with filterQuery', filterQuery);
-      throw new NotFoundException('Document not found.');
+  async findOne(
+    filterQuery: FilterQuery<TDocument>,
+    populate?: PopulateOptions | PopulateOptions[],
+  ): Promise<TDocument> {
+    const query = this._model.findOne(filterQuery, {}, { lean: true });
+    if (populate) {
+      query.populate(populate);
     }
-
+    const document = await query.exec();
     return document as TDocument;
+  }
+
+  async find(
+    filterQuery: FilterQuery<TDocument>,
+    populate?: PopulateOptions | PopulateOptions[],
+  ): Promise<TDocument[]> {
+    const query = this._model.find(filterQuery, {}, { lean: true });
+    if (populate) {
+      query.populate(populate);
+    }
+    const document = await query.exec();
+    return document as TDocument[];
   }
 
   async findOneAndUpdate(
     filterQuery: FilterQuery<TDocument>,
-    update: UpdateQuery<TDocument>
+    update: UpdateQuery<TDocument>,
+    populate?: PopulateOptions | PopulateOptions[],
   ) {
-    const document = await this.model.findOneAndUpdate(filterQuery, update, {
+    const query = this._model.findOneAndUpdate(filterQuery, update, {
       lean: true,
       new: true,
     });
-
-    if (!document) {
-      this._logger.warn(`Document not found with filterQuery:`, filterQuery);
-      throw new NotFoundException('Document not found.');
+    if (populate) {
+      query.populate(populate);
     }
-
-    return document;
-  }
-
-  async find(filterQuery: FilterQuery<TDocument>) {
-    return this.model.find(filterQuery, {}, { lean: true });
+    const document = await query.exec();
+    return document as TDocument;
   }
 }

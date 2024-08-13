@@ -7,14 +7,20 @@
     </p>
   </smt-card-header>
   <smt-card-content>
-    <div class="flex items-center w-full max-w-sm space-x-2">
-      <input
-        class="w-full"
-        smtInput
-        type="text"
-        placeholder="Room identifier"
-      />
-      <button smtBtn>Join</button>
-    </div>
+    <form [formGroup]="joinRoomForm" (ngSubmit)="onSubmit()">
+      <div class="flex items-center w-full max-w-sm space-x-2">
+        <input
+          class="w-full"
+          smtInput
+          formControlName="roomId"
+          type="text"
+          placeholder="Room identifier"
+          [error]="
+            (joinRoomForm.controls.roomId.invalid || hasError()) && submitted()
+          "
+        />
+        <button smtBtn [disabled]="isLoading()" type="submit">Join</button>
+      </div>
+    </form>
   </smt-card-content>
 </smt-card>

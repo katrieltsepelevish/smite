@@ -28,17 +28,17 @@ export class AuthController {
   constructor(
     private readonly _configService: ConfigService,
     private readonly _authService: AuthService,
-    private readonly _jwtService: JwtService
+    private readonly _jwtService: JwtService,
   ) {}
 
   @Public()
   @Post('/register')
   @HttpCode(HttpStatus.CREATED)
   async register(
-    @Body() createUserDto: RegisterRequestDto,
-    @Res({ passthrough: true }) res: Response
+    @Body() registerRequestDto: RegisterRequestDto,
+    @Res({ passthrough: true }) res: Response,
   ) {
-    const user = await this._authService.register(createUserDto);
+    const user = await this._authService.register(registerRequestDto);
 
     const domain: string = this._configService.getOrThrow('FRONTEND_URL');
     const domainAttributes = DomainUtil.getAttributes(domain);
@@ -49,7 +49,7 @@ export class AuthController {
 
     const expires = new Date();
     expires.setSeconds(
-      expires.getSeconds() + this._configService.get('JWT_EXPIRATION')
+      expires.getSeconds() + this._configService.get('JWT_EXPIRATION'),
     );
 
     const token = this._jwtService.sign(tokenPayload);
@@ -71,7 +71,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async login(
     @User() user: UserDocument,
-    @Res({ passthrough: true }) res: Response
+    @Res({ passthrough: true }) res: Response,
   ) {
     const tokenPayload: AccessTokenPayload = {
       userId: user._id.toHexString(),
@@ -79,7 +79,7 @@ export class AuthController {
 
     const expires = new Date();
     expires.setSeconds(
-      expires.getSeconds() + this._configService.get('JWT_EXPIRATION')
+      expires.getSeconds() + this._configService.get('JWT_EXPIRATION'),
     );
 
     const token = this._jwtService.sign(tokenPayload);
