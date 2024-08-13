@@ -1,11 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { NgxSonnerToaster } from 'ngx-sonner';
 import { RouterModule } from '@angular/router';
 
 import { AuthService } from './core/auth/auth.service';
 
 @Component({
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, NgxSonnerToaster],
   selector: 'app-root',
   templateUrl: './app.component.html',
 })

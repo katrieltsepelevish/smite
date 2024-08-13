@@ -6,12 +6,25 @@
   </div>
   <nav class="grid gap-1 p-2">
     <smt-tooltip position="right" label="Playground">
-      <a smtBtn routerLink="/" variant="ghost" class="h-10 w-10 p-0 bg-muted">
+      <a
+        smtBtn
+        routerLink="/"
+        routerLinkActive="bg-muted"
+        [routerLinkActiveOptions]="{ exact: true }"
+        variant="ghost"
+        class="h-10 w-10 p-0 bg-muted"
+      >
         <ng-icon name="lucideTerminal" size="20" />
       </a>
     </smt-tooltip>
     <smt-tooltip position="right" label="Overview">
-      <a smtBtn routerLink="/overview" variant="ghost" class="h-10 w-10 p-0">
+      <a
+        smtBtn
+        routerLink="/overview"
+        routerLinkActive="bg-muted"
+        variant="ghost"
+        class="h-10 w-10 p-0"
+      >
         <ng-icon name="lucideBarChart" size="20" />
       </a>
     </smt-tooltip>

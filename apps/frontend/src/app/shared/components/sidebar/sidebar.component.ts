@@ -6,13 +6,14 @@ import {
 } from '@smite/design-system';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { lucideZap, lucideBarChart, lucideTerminal } from '@ng-icons/lucide';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
   imports: [
     RouterLink,
+    RouterLinkActive,
     SmtThemeSwitcherComponent,
     NgIconComponent,
     SmtTooltipComponent,

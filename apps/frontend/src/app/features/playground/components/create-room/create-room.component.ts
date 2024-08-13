@@ -1,5 +1,4 @@
 import { Component, inject, signal } from '@angular/core';
-
 import {
   SmtButtonDirective,
   SmtCardComponent,
@@ -11,6 +10,8 @@ import {
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { lucideLoader, lucideToyBrick } from '@ng-icons/lucide';
 import { finalize } from 'rxjs';
+import { toast } from 'ngx-sonner';
+import moment from 'moment';
 
 import { RoomsService } from '../../../../shared/services/rooms.service';
 
@@ -40,6 +41,10 @@ export class CreateRoomComponent {
     this._roomsService
       .createRoom()
       .pipe(finalize(() => this.isLoading.set(false)))
-      .subscribe();
+      .subscribe(({ createdAt }) => {
+        toast('Room has been created', {
+          description: moment(createdAt).format('dddd, MMMM Do [at] h:mma'),
+        });
+      });
   }
 }

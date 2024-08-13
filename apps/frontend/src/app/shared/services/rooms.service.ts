@@ -16,7 +16,7 @@ export class RoomsService {
       map((room) => {
         this.rooms.set([...this.rooms(), room]);
         return room;
-      })
+      }),
     );
   }
 
@@ -25,7 +25,7 @@ export class RoomsService {
       map((rooms) => {
         this.rooms.set(rooms);
         return rooms;
-      })
+      }),
     );
   }
 }

@@ -23,13 +23,15 @@ import {
   lucideRefreshCw,
   lucideEllipsis,
   lucideLoader,
+  lucideCopy,
 } from '@ng-icons/lucide';
 import { finalize } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 import { RoomsService } from '../../../../shared/services/rooms.service';
 import { RelativeTimePipe } from '../../../../shared/pipes/relative-time.pipe';
 import { ShortenIdPipe } from '../../../../shared/pipes/shorten-id-pipe';
-import { CommonModule } from '@angular/common';
+import { ClipboardService } from '../../../../shared/services/clipboard.service';
 
 @Component({
   selector: 'app-rooms-list',
@@ -49,12 +51,19 @@ import { CommonModule } from '@angular/common';
     ShortenIdPipe,
   ],
   providers: [
-    provideIcons({ lucideLoader, lucideRefreshCw, lucideBook, lucideEllipsis }),
+    provideIcons({
+      lucideCopy,
+      lucideLoader,
+      lucideRefreshCw,
+      lucideBook,
+      lucideEllipsis,
+    }),
   ],
   templateUrl: './rooms-list.component.html',
 })
 export class RoomsListComponent implements OnInit {
   private readonly _roomsService = inject(RoomsService);
+  private readonly _clipboardService = inject(ClipboardService);
   private readonly _destoryRef = inject(DestroyRef);
 
   public readonly rooms = computed(() => this._roomsService.rooms());
@@ -83,5 +92,9 @@ export class RoomsListComponent implements OnInit {
   public refreshRooms(): void {
     this.isRefreshing.set(true);
     this._loadUserRooms();
+  }
+
+  public copyToClipboard(text: string): void {
+    this._clipboardService.copyToClipboard(text);
   }
 }

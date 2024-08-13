@@ -36,8 +36,16 @@
               {{ room.createdAt | relativeTime }}
             </small>
           </div>
-          <div smtBadge variant="secondary">
+          <div smtBadge variant="secondary" class="flex gap-2">
             {{ room._id | shortenId }}
+            <button
+              smtBtn
+              variant="ghost"
+              class="p-0 h-auto"
+              (click)="copyToClipboard(room._id)"
+            >
+              <ng-icon class="text-black" size="12" name="lucideCopy" />
+            </button>
           </div>
           <button smtBtn size="icon" class="ml-auto" variant="ghost">
             <ng-icon size="20" name="lucideEllipsis" />
