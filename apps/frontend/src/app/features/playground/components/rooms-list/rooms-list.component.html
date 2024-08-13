@@ -7,36 +7,47 @@
         continued teamwork and productivity.
       </p>
     </div>
-    <button smtBtn class="flex gap-2">
-      <ng-icon size="16" name="lucideRefreshCw" />
+    <button
+      smtBtn
+      class="flex gap-2"
+      [disabled]="isRefreshing() || isLoading()"
+      (click)="refreshRooms()"
+    >
+      <ng-icon
+        size="16"
+        name="lucideRefreshCw"
+        [ngClass]="{ 'animate-spin': isRefreshing() }"
+      />
       <span>Refresh</span>
     </button>
   </smt-card-header>
   <smt-card-content class="p-6 pt-0 flex flex-col gap-4">
-    <div class="flex flex-1 items-center gap-4">
-      <ng-icon class="mr-2 text-black" size="32" name="lucideBook" />
-      <div class="flex flex-col">
-        <span>Untitled</span>
-        <small class="text-muted-foreground text-xs">4 hours ago</small>
+    @if (isLoading()) {
+      <div class="flex justify-center items-center w-full p-20">
+        <ng-icon name="lucideLoader" class="animate-spin mr-2" size="21" />
       </div>
-      <div smtBadge variant="secondary">42dz541e</div>
-      <button smtBtn size="icon" class="ml-auto" variant="ghost">
-        <ng-icon size="20" name="lucideEllipsis" />
-      </button>
-    </div>
+    } @else {
+      @for (room of rooms(); track room._id) {
+        <div class="flex flex-1 items-center gap-4">
+          <ng-icon class="mr-2 text-black" size="32" name="lucideBook" />
+          <div class="flex flex-col">
+            <span>{{ room.name }}</span>
+            <small class="text-muted-foreground text-xs">
+              {{ room.createdAt | relativeTime }}
+            </small>
+          </div>
+          <div smtBadge variant="secondary">
+            {{ room._id | shortenId }}
+          </div>
+          <button smtBtn size="icon" class="ml-auto" variant="ghost">
+            <ng-icon size="20" name="lucideEllipsis" />
+          </button>
+        </div>
 
-    <smt-separator />
-
-    <div class="flex flex-1 items-center gap-4">
-      <ng-icon class="mr-2 text-black" size="32" name="lucideBook" />
-      <div class="flex flex-col">
-        <span>Untitled</span>
-        <small class="text-muted-foreground text-xs">4 hours ago</small>
-      </div>
-      <div smtBadge variant="secondary">42dz541e</div>
-      <button smtBtn size="icon" class="ml-auto" variant="ghost">
-        <ng-icon size="20" name="lucideEllipsis" />
-      </button>
-    </div>
+        @if (!$last) {
+          <smt-separator />
+        }
+      }
+    }
   </smt-card-content>
 </smt-card>

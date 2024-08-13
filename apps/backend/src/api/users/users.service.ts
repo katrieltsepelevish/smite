@@ -8,15 +8,15 @@ import { GetUserDto } from './dto/get-user.dto';
 export class UsersService {
   constructor(private readonly _usersRepository: UsersRepository) {}
 
-  async create(createUserDto: CreateUserDto) {
+  public async create(createUserDto: CreateUserDto) {
     return this._usersRepository.create(createUserDto);
   }
 
-  async findOneByEmail(email: string) {
+  public async findOneByEmail(email: string) {
     return this._usersRepository.findOne({ email });
   }
 
-  async getUser(getUserDto: GetUserDto) {
+  public async getUser(getUserDto: GetUserDto) {
     return this._usersRepository.findOne(getUserDto);
   }
 }

@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import * as Bcrypt from 'bcrypt';
 
-import { UserDocument } from '../users/users.schema';
+import { UserDocument } from '../users/user.schema';
 import { UsersService } from '../users/users.service';
 import { RegisterRequestDto } from './dto/register-request.dto';
 import { CreateUserDto } from '../users/dto/create-user.dto';

@@ -8,6 +8,7 @@ import {
   map,
   Observable,
   of,
+  throwError,
 } from 'rxjs';
 
 import { User } from '../../shared/interfaces/user.interface';
@@ -32,16 +33,7 @@ export class AuthService {
     map(Boolean)
   );
 
-  private readonly _isLoading$ = new BehaviorSubject<boolean>(false);
-  public readonly isLoading$ = this._isLoading$.asObservable();
-
-  private readonly _error$ = new BehaviorSubject<string>('');
-  public readonly error$ = this._error$.asObservable();
-
   public login(payload: LoginPayload): Observable<AuthResponse | null> {
-    this._isLoading$.next(true);
-    this._error$.next('');
-
     return this._http
       .post<AuthResponse>(`${environment.apiUrl}/auth/login`, payload)
       .pipe(
@@ -51,17 +43,12 @@ export class AuthService {
         }),
         catchError((err) => {
           this._currentUser$.next(null);
-          this._error$.next(err.error.message);
-          return of(null);
-        }),
-        finalize(() => this._isLoading$.next(false))
+          return throwError(() => new Error(err.error.message));
+        })
       );
   }
 
   public register(payload: RegisterPayload): Observable<AuthResponse | null> {
-    this._isLoading$.next(true);
-    this._error$.next('');
-
     return this._http
       .post<AuthResponse>(`${environment.apiUrl}/auth/register`, payload)
       .pipe(
@@ -71,16 +58,12 @@ export class AuthService {
         }),
         catchError((err) => {
           this._currentUser$.next(null);
-          this._error$.next(err.error.message);
-          return of(null);
-        }),
-        finalize(() => this._isLoading$.next(false))
+          return throwError(() => new Error(err.error.message));
+        })
       );
   }
 
   public getCurrentUser(): Observable<AuthResponse | null> {
-    this._isLoading$.next(true);
-
     return this._http.get<AuthResponse>(`${environment.apiUrl}/auth/me`).pipe(
       map((user) => {
         this._currentUser$.next(user);
@@ -89,18 +72,14 @@ export class AuthService {
       catchError(() => {
         this._currentUser$.next(null);
         return of(null);
-      }),
-      finalize(() => this._isLoading$.next(false))
+      })
     );
   }
 
   public logout(): Observable<void> {
-    this._isLoading$.next(true);
-
     return this._http.post<void>(`${environment.apiUrl}/auth/logout`, {}).pipe(
       finalize(() => {
         this._currentUser$.next(null);
-        this._isLoading$.next(false);
       })
     );
   }

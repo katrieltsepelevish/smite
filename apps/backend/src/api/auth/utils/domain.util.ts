@@ -2,7 +2,10 @@ export class DomainUtil {
   static getAttributes = (url: string) => {
     // Check if the URL contains 'localhost'
     if (url.includes('localhost')) {
-      return {};
+      return {
+        domain: 'localhost',
+        secure: false,
+      };
     }
 
     // Extract the domain from the URL
@@ -11,7 +14,6 @@ export class DomainUtil {
 
     return {
       domain,
-      sameSite: 'none' as const,
       secure: true,
     };
   };

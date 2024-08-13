@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   HttpStatus,
   Post,
   Res,
@@ -11,7 +12,7 @@ import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 
-import { UserDocument } from '../users/users.schema';
+import { UserDocument } from '../users/user.schema';
 import { AuthService } from './auth.service';
 import { RegisterRequestDto } from './dto/register-request.dto';
 import { ConfigService } from '@nestjs/config';
@@ -32,6 +33,7 @@ export class AuthController {
 
   @Public()
   @Post('/register')
+  @HttpCode(HttpStatus.CREATED)
   async register(
     @Body() createUserDto: RegisterRequestDto,
     @Res({ passthrough: true }) res: Response
@@ -60,12 +62,13 @@ export class AuthController {
       ...domainAttributes,
     });
 
-    res.status(HttpStatus.CREATED).send(UserUtil.normalizeUser(user));
+    return UserUtil.normalizeUser(user);
   }
 
   @Public()
   @UseGuards(AuthGuard('local'))
   @Post('/login')
+  @HttpCode(HttpStatus.OK)
   async login(
     @User() user: UserDocument,
     @Res({ passthrough: true }) res: Response
@@ -92,11 +95,12 @@ export class AuthController {
       ...domainAttributes,
     });
 
-    res.status(HttpStatus.OK).send(UserUtil.normalizeUser(user));
+    return UserUtil.normalizeUser(user);
   }
 
   @Post('/logout')
   @UseGuards(JwtGuard)
+  @HttpCode(HttpStatus.OK)
   async logout(@Res({ passthrough: true }) res: Response) {
     const domain: string = this._configService.getOrThrow('FRONTEND_URL');
     const domainAttributes = DomainUtil.getAttributes(domain);
@@ -108,12 +112,11 @@ export class AuthController {
       expires: new Date(0),
       ...domainAttributes,
     });
-
-    res.sendStatus(HttpStatus.OK);
   }
 
   @Get('/me')
   @UseGuards(JwtGuard)
+  @HttpCode(HttpStatus.OK)
   async getUser(@User() user: UserDocument) {
     return UserUtil.normalizeUser(user);
   }

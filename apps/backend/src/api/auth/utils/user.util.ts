@@ -1,4 +1,4 @@
-import { UserDocument } from '../../users/users.schema';
+import { UserDocument } from '../../users/user.schema';
 
 export class UserUtil {
   static normalizeUser(user: UserDocument) {

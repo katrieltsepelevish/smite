@@ -27,12 +27,12 @@
           [error]="hasErrors('firstName')"
         />
         <smt-input-error *ngIf="hasErrors('firstName')">
-          <span *ngIf="hasError('firstName', 'required')"
-            >First Name is required.</span
-          >
-          <span *ngIf="hasError('firstName', 'minlength')"
-            >First Name must be at least 2 characters long.</span
-          >
+          <span *ngIf="hasError('firstName', 'required')">
+            First Name is required.
+          </span>
+          <span *ngIf="hasError('firstName', 'minlength')">
+            First Name must be at least 2 characters long.
+          </span>
         </smt-input-error>
       </smt-form-field>
       <smt-form-field>
@@ -47,12 +47,12 @@
           [error]="hasErrors('lastName')"
         />
         <smt-input-error *ngIf="hasErrors('lastName')">
-          <span *ngIf="hasError('lastName', 'required')"
-            >First Name is required.</span
-          >
-          <span *ngIf="hasError('lastName', 'minlength')"
-            >First Name must be at least 2 characters long.</span
-          >
+          <span *ngIf="hasError('lastName', 'required')">
+            First Name is required.
+          </span>
+          <span *ngIf="hasError('lastName', 'minlength')">
+            First Name must be at least 2 characters long.
+          </span>
         </smt-input-error>
       </smt-form-field>
       <smt-form-field>
@@ -67,12 +67,12 @@
           class="w-full"
           [error]="hasErrors('email')"
         />
-        <smt-input-error *ngIf="hasErrors('email')"
-          ><span *ngIf="hasError('email', 'required')">Email is required.</span
-          ><span *ngIf="hasError('email', 'email')"
-            >Email must be a valid email address.</span
-          ></smt-input-error
-        >
+        <smt-input-error *ngIf="hasErrors('email')">
+          <span *ngIf="hasError('email', 'required')">Email is required.</span>
+          <span *ngIf="hasError('email', 'email')">
+            Email must be a valid email address.
+          </span>
+        </smt-input-error>
       </smt-form-field>
       <smt-form-field>
         <label smtLabel for="passowrd">Password</label>
@@ -87,12 +87,12 @@
           [error]="hasErrors('password')"
         />
         <smt-input-error *ngIf="hasErrors('password')">
-          <span *ngIf="hasError('password', 'required')"
-            >Password is required.</span
-          >
-          <span *ngIf="hasError('password', 'minlength')"
-            >Password must be at least 6 characters long.</span
-          >
+          <span *ngIf="hasError('password', 'required')">
+            Password is required.
+          </span>
+          <span *ngIf="hasError('password', 'minlength')">
+            Password must be at least 6 characters long.
+          </span>
         </smt-input-error>
       </smt-form-field>
       <smt-form-field>
@@ -108,36 +108,38 @@
           [error]="hasErrors('confirmPassword')"
         />
         <smt-input-error *ngIf="hasErrors('confirmPassword')">
-          <span *ngIf="hasError('confirmPassword', 'required')"
-            >Confirm Password is required.</span
-          >
-          <span *ngIf="hasError('confirmPassword', 'minlength')"
-            >Confirm Password must be at least 6 characters long.</span
-          >
-          <span *ngIf="hasError('confirmPassword', 'mustMatch')"
-            >Passwords must match.</span
-          >
+          <span *ngIf="hasError('confirmPassword', 'required')">
+            Confirm Password is required.
+          </span>
+          <span *ngIf="hasError('confirmPassword', 'minlength')">
+            Confirm Password must be at least 6 characters long.
+          </span>
+          <span *ngIf="hasError('confirmPassword', 'mustMatch')">
+            Passwords must match.
+          </span>
         </smt-input-error>
       </smt-form-field>
-      <button smtBtn [disabled]="isLoading$ | async" type="submit">
-        @if (isLoading$ | async) {
-        <ng-icon name="lucideLoader" class="animate-spin mr-2" size="16" />
-        } Sign Up
+      <button smtBtn [disabled]="isLoading()" type="submit">
+        @if (isLoading()) {
+          <ng-icon name="lucideLoader" class="animate-spin mr-2" size="16" />
+        }
+        Sign Up
       </button>
     </form>
-    @if ((error$ | async); as error) {
-    <smt-alert variant="negative">
-      <ng-icon smtAlertIcon name="lucideShieldAlert" size="16" />
-      <h4 smtAlertTitle>{{ error }}</h4>
-    </smt-alert>
+    @if (error()) {
+      <smt-alert variant="negative">
+        <ng-icon smtAlertIcon name="lucideShieldAlert" size="16" />
+        <h4 smtAlertTitle>{{ error() }}</h4>
+      </smt-alert>
     }
     <p class="text-muted-foreground sm:px-8 text-center text-sm">
       Already have an account?
       <a
         class="hover:text-primary cursor-pointer underline underline-offset-4"
         routerLink="/login"
-        >Sign in</a
       >
+        Sign in
+      </a>
     </p>
   </div>
 </smt-card>

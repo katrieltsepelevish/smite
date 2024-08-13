@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   SmtAlertComponent,
@@ -21,7 +21,7 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../auth.service';
-import { Observable } from 'rxjs';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -45,25 +45,19 @@ import { Observable } from 'rxjs';
   providers: [provideIcons({ lucideGithub, lucideLoader, lucideShieldAlert })],
   templateUrl: './login.component.html',
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   public readonly submitted = signal<boolean>(false);
+  public readonly isLoading = signal<boolean>(false);
+  public readonly error = signal<string>('');
 
   private readonly _authService = inject(AuthService);
   private readonly _formBuilder = inject(FormBuilder);
   private readonly _router = inject(Router);
 
-  public isLoading$!: Observable<boolean>;
-  public error$!: Observable<string>;
-
   public readonly loginForm = this._formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
-
-  ngOnInit(): void {
-    this.isLoading$ = this._authService.isLoading$;
-    this.error$ = this._authService.error$;
-  }
 
   public hasErrors(controlName: string): boolean {
     const control = this.loginForm.get(controlName);
@@ -92,13 +86,26 @@ export class LoginComponent implements OnInit {
       return;
     }
 
+    this.isLoading.set(true);
+    this.error.set('');
+
     this._authService
       .login({
         email: this.loginForm.controls.email.value as string,
         password: this.loginForm.controls.password.value as string,
       })
-      .subscribe(() => {
-        this._router.navigateByUrl('/');
+      .pipe(
+        finalize(() => {
+          this.isLoading.set(false);
+        })
+      )
+      .subscribe({
+        next: () => {
+          this._router.navigate(['/']);
+        },
+        error: (err) => {
+          this.error.set(err);
+        },
       });
   }
 }

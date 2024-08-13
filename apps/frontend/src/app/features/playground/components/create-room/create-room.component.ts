@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 
 import {
   SmtButtonDirective,
@@ -9,7 +9,10 @@ import {
   SmtCardTitleDirective,
 } from '@smite/design-system';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { lucideToyBrick } from '@ng-icons/lucide';
+import { lucideLoader, lucideToyBrick } from '@ng-icons/lucide';
+import { finalize } from 'rxjs';
+
+import { RoomsService } from '../../../../shared/services/rooms.service';
 
 @Component({
   selector: 'app-create-room',
@@ -23,7 +26,20 @@ import { lucideToyBrick } from '@ng-icons/lucide';
     SmtCardTitleDirective,
     SmtCardSubtitleDirective,
   ],
-  providers: [provideIcons({ lucideToyBrick })],
+  providers: [provideIcons({ lucideToyBrick, lucideLoader })],
   templateUrl: './create-room.component.html',
 })
-export class CreateRoomComponent {}
+export class CreateRoomComponent {
+  private readonly _roomsService = inject(RoomsService);
+
+  public readonly isLoading = signal<boolean>(false);
+
+  public createRoom(): void {
+    this.isLoading.set(true);
+
+    this._roomsService
+      .createRoom()
+      .pipe(finalize(() => this.isLoading.set(false)))
+      .subscribe();
+  }
+}

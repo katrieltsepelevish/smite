@@ -7,8 +7,12 @@
     </p>
   </smt-card-header>
   <smt-card-content>
-    <button smtBtn class="w-full flex gap-2">
-      <ng-icon name="lucideToyBrick" size="20" />
+    <button smtBtn class="w-full flex gap-2" (click)="createRoom()">
+      @if (isLoading()) {
+        <ng-icon name="lucideLoader" class="animate-spin" size="16" />
+      } @else {
+        <ng-icon name="lucideToyBrick" size="20" />
+      }
       <span>Create room</span>
     </button>
   </smt-card-content>

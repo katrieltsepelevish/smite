@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   SmtAlertComponent,
@@ -23,7 +23,7 @@ import { CommonModule } from '@angular/common';
 
 import { PasswordValidator } from '../../validators/password.validator';
 import { AuthService } from '../../auth.service';
-import { Observable } from 'rxjs';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -47,15 +47,14 @@ import { Observable } from 'rxjs';
   providers: [provideIcons({ lucideGithub, lucideLoader, lucideShieldAlert })],
   templateUrl: './register.component.html',
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
   public readonly submitted = signal<boolean>(false);
+  public readonly isLoading = signal<boolean>(false);
+  public readonly error = signal<string>('');
 
   private readonly _authService = inject(AuthService);
   private readonly _formBuilder = inject(FormBuilder);
   private readonly _router = inject(Router);
-
-  public isLoading$!: Observable<boolean>;
-  public error$!: Observable<string>;
 
   public readonly registerForm = this._formBuilder.group(
     {
@@ -67,11 +66,6 @@ export class RegisterComponent implements OnInit {
     },
     { validators: PasswordValidator.mustMatch('password', 'confirmPassword') }
   );
-
-  ngOnInit(): void {
-    this.isLoading$ = this._authService.isLoading$;
-    this.error$ = this._authService.error$;
-  }
 
   public hasErrors(controlName: string): boolean {
     const control = this.registerForm.get(controlName);
@@ -100,6 +94,9 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
+    this.isLoading.set(true);
+    this.error.set('');
+
     this._authService
       .register({
         firstName: this.registerForm.controls.firstName.value as string,
@@ -107,8 +104,18 @@ export class RegisterComponent implements OnInit {
         email: this.registerForm.controls.email.value as string,
         password: this.registerForm.controls.password.value as string,
       })
-      .subscribe(() => {
-        this._router.navigateByUrl('/');
+      .pipe(
+        finalize(() => {
+          this.isLoading.set(false);
+        })
+      )
+      .subscribe({
+        next: () => {
+          this._router.navigateByUrl('/');
+        },
+        error: (err) => {
+          this.error.set(err);
+        },
       });
   }
 }

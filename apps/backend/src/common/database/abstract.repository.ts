@@ -3,7 +3,7 @@ import { FilterQuery, Model, Types, UpdateQuery, SaveOptions } from 'mongoose';
 import { AbstractDocument } from './abstract.schema';
 
 export abstract class AbstractRepository<TDocument extends AbstractDocument> {
-  protected abstract readonly logger: Logger;
+  protected abstract readonly _logger: Logger;
 
   constructor(protected readonly model: Model<TDocument>) {}
 
@@ -24,7 +24,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     const document = await this.model.findOne(filterQuery, {}, { lean: true });
 
     if (!document) {
-      this.logger.warn('Document not found with filterQuery', filterQuery);
+      this._logger.warn('Document not found with filterQuery', filterQuery);
       throw new NotFoundException('Document not found.');
     }
 
@@ -41,7 +41,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     });
 
     if (!document) {
-      this.logger.warn(`Document not found with filterQuery:`, filterQuery);
+      this._logger.warn(`Document not found with filterQuery:`, filterQuery);
       throw new NotFoundException('Document not found.');
     }
 
