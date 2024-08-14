@@ -30,7 +30,8 @@ export const appRoutes: Route[] = [
     canActivate: [GuestGuard],
   },
   {
-    path: '**',
+    path: '404',
     component: NotFoundComponent,
   },
+  { path: '**', redirectTo: '/404' },
 ];

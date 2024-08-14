@@ -58,6 +58,21 @@ export class WhiteboardsController {
     return whiteboards;
   }
 
+  @Get('/:token')
+  @UseGuards(JwtGuard)
+  @HttpCode(HttpStatus.OK)
+  async getWhiteboard(
+    @Param('token') token: string,
+    @CurrentUser() user: User,
+  ) {
+    const whiteboards = await this._whiteboardsService.getWhiteboardByToken(
+      token,
+      user.id,
+    );
+
+    return whiteboards;
+  }
+
   @Delete('/:id')
   @UseGuards(JwtGuard)
   @HttpCode(HttpStatus.OK)

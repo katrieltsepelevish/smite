@@ -1,3 +1,12 @@
 <app-layout class="grid-pattern">
-  <div layoutHeader class="flex flex-1 justify-center items-center">test</div>
+  <div layoutHeader class="flex flex-1 justify-center items-center">
+    {{ whiteboard()?.name }}
+  </div>
+  @if (isLoading()) {
+    <div class="flex flex-1 justify-center items-center h-full">
+      <ng-icon name="lucideLoader" class="animate-spin" size="24" />
+    </div>
+  } @else {
+    @if (whiteboard(); as whiteboard) {}
+  }
 </app-layout>

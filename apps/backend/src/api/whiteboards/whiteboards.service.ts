@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   ForbiddenException,
   Injectable,
@@ -44,14 +45,36 @@ export class WhiteboardsService {
     return this._whiteboardsRepository.save(createdWhiteboard);
   }
 
-  public async getWhiteboard(id: string): Promise<Whiteboard> {
+  public async getWhiteboardByToken(
+    token: string,
+    userId: string,
+  ): Promise<Whiteboard> {
+    const user = await this._usersRepository.findOne({
+      where: { id: userId },
+      relations: ['whiteboards'],
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
     const whiteboard = await this._whiteboardsRepository.findOne({
-      where: { id: id },
-      relations: ['notes'],
+      where: { token },
+      relations: ['notes', 'users'],
     });
 
     if (!whiteboard) {
       throw new NotFoundException('Whiteboard not found.');
+    }
+
+    const hasJoinedWhiteboard = whiteboard.users.some(
+      (user) => user.id === userId,
+    );
+
+    if (!hasJoinedWhiteboard) {
+      throw new BadRequestException(
+        'You do not have access to this whiteboard. Please ensure you have joined the whiteboard or contact support if you believe this is an error.',
+      );
     }
 
     return whiteboard;
