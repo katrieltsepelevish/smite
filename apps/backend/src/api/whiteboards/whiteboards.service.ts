@@ -17,13 +17,13 @@ export class WhiteboardsService {
 
   constructor(
     @InjectRepository(Whiteboard)
-    private readonly _whiteboardRepository: Repository<Whiteboard>,
+    private readonly _whiteboardsRepository: Repository<Whiteboard>,
     @InjectRepository(User)
-    private readonly _userRepository: Repository<User>,
+    private readonly _usersRepository: Repository<User>,
   ) {}
 
   public async createWhiteboard(ownerId: string): Promise<Whiteboard> {
-    const owner = await this._userRepository.findOne({
+    const owner = await this._usersRepository.findOne({
       where: { id: ownerId },
     });
 
@@ -31,18 +31,18 @@ export class WhiteboardsService {
       throw new NotFoundException('User not found.');
     }
 
-    const createdWhiteboard = this._whiteboardRepository.create({
+    const createdWhiteboard = this._whiteboardsRepository.create({
       name: 'Untitled',
       token: shortid.generate(),
       ownerId: owner.id,
       users: [owner],
     });
 
-    return this._whiteboardRepository.save(createdWhiteboard);
+    return this._whiteboardsRepository.save(createdWhiteboard);
   }
 
   public async getWhiteboard(id: string): Promise<Whiteboard> {
-    const whiteboard = await this._whiteboardRepository.findOne({
+    const whiteboard = await this._whiteboardsRepository.findOne({
       where: { id: id },
       relations: ['notes'],
     });
@@ -55,7 +55,7 @@ export class WhiteboardsService {
   }
 
   public async getWhiteboardsByUserId(userId: string): Promise<Whiteboard[]> {
-    const user = await this._userRepository.findOne({
+    const user = await this._usersRepository.findOne({
       where: { id: userId },
       relations: ['whiteboards'],
     });
@@ -71,7 +71,7 @@ export class WhiteboardsService {
     token: string,
     userId: string,
   ): Promise<Whiteboard> {
-    const whiteboard = await this._whiteboardRepository.findOne({
+    const whiteboard = await this._whiteboardsRepository.findOne({
       where: { token },
       relations: ['users'],
     });
@@ -80,7 +80,7 @@ export class WhiteboardsService {
       throw new NotFoundException('Whiteboard not found.');
     }
 
-    const user = await this._userRepository.findOne({
+    const user = await this._usersRepository.findOne({
       where: { id: userId },
     });
 
@@ -97,6 +97,6 @@ export class WhiteboardsService {
     }
 
     whiteboard.users.push(user);
-    return this._whiteboardRepository.save(whiteboard);
+    return this._whiteboardsRepository.save(whiteboard);
   }
 }

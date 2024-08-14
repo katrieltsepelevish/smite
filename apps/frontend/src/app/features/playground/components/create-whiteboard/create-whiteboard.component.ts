@@ -11,7 +11,7 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { lucideLoader, lucideToyBrick } from '@ng-icons/lucide';
 import { finalize } from 'rxjs';
 import { toast } from 'ngx-sonner';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import { WhiteboardsService } from '../../../../shared/services/whiteboards.service';
 
@@ -43,7 +43,9 @@ export class CreateWhiteboardComponent {
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe(({ createdAt }) => {
         toast('Whiteboard has been created', {
-          description: moment(createdAt).format('dddd, MMMM Do [at] h:mma'),
+          description: moment(createdAt)
+            .tz('Asia/Jerusalem')
+            .format('dddd, MMMM Do [at] h:mma'),
         });
       });
   }

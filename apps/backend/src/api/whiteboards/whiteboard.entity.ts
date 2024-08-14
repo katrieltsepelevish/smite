@@ -22,18 +22,21 @@ export class Whiteboard {
   @Column()
   token: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: Date;
 
   @Column({ type: 'uuid' })
   ownerId: string;
 
-  @ManyToMany(() => User, (user) => user.whiteboards)
+  @ManyToMany(() => User, (user) => user.whiteboards, { cascade: true })
   users: User[];
 
-  @OneToMany(() => Note, (note) => note.whiteboard, { nullable: true })
+  @OneToMany(() => Note, (note) => note.whiteboard, {
+    nullable: true,
+    cascade: true,
+  })
   notes: Note[];
 }

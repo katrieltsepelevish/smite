@@ -31,6 +31,7 @@ import { CommonModule } from '@angular/common';
 import { WhiteboardsService } from '../../../../shared/services/whiteboards.service';
 import { RelativeTimePipe } from '../../../../shared/pipes/relative-time.pipe';
 import { ClipboardService } from '../../../../shared/services/clipboard.service';
+import { toast } from 'ngx-sonner';
 
 @Component({
   selector: 'app-whiteboards-list',
@@ -86,7 +87,18 @@ export class WhiteboardsListComponent implements OnInit {
           this.isRefreshing.set(false);
         }),
       )
-      .subscribe();
+      .subscribe({
+        next: () => {
+          if (this.isRefreshing()) {
+            toast.success('Whiteboards list updated successfully');
+          }
+        },
+        error: () => {
+          if (this.isRefreshing()) {
+            toast.error('Failed to refresh the whiteboards list');
+          }
+        },
+      });
   }
 
   public refreshWhiteboards(): void {
