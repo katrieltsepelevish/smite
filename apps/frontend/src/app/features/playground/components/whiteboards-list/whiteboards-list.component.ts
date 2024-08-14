@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
-  SmtBadgeDirective,
   SmtButtonDirective,
   SmtCardComponent,
   SmtCardContentComponent,
@@ -18,20 +17,13 @@ import {
   SmtSeparatorComponent,
 } from '@smite/design-system';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import {
-  lucideBook,
-  lucideRefreshCw,
-  lucideEllipsis,
-  lucideLoader,
-  lucideCopy,
-} from '@ng-icons/lucide';
+import { lucideRefreshCw, lucideLoader } from '@ng-icons/lucide';
 import { finalize } from 'rxjs';
+import { toast } from 'ngx-sonner';
 import { CommonModule } from '@angular/common';
 
 import { WhiteboardsService } from '../../../../shared/services/whiteboards.service';
-import { RelativeTimePipe } from '../../../../shared/pipes/relative-time.pipe';
-import { ClipboardService } from '../../../../shared/services/clipboard.service';
-import { toast } from 'ngx-sonner';
+import { WhiteboardComponent } from '../whiteboard/whiteboard.component';
 
 @Component({
   selector: 'app-whiteboards-list',
@@ -39,7 +31,6 @@ import { toast } from 'ngx-sonner';
   imports: [
     CommonModule,
     NgIconComponent,
-    SmtBadgeDirective,
     SmtButtonDirective,
     SmtCardComponent,
     SmtCardHeaderComponent,
@@ -47,26 +38,22 @@ import { toast } from 'ngx-sonner';
     SmtCardTitleDirective,
     SmtCardSubtitleDirective,
     SmtSeparatorComponent,
-    RelativeTimePipe,
+    WhiteboardComponent,
   ],
   providers: [
     provideIcons({
-      lucideCopy,
       lucideLoader,
       lucideRefreshCw,
-      lucideBook,
-      lucideEllipsis,
     }),
   ],
   templateUrl: './whiteboards-list.component.html',
 })
 export class WhiteboardsListComponent implements OnInit {
   private readonly _whiteboardsService = inject(WhiteboardsService);
-  private readonly _clipboardService = inject(ClipboardService);
   private readonly _destoryRef = inject(DestroyRef);
 
   public readonly whiteboards = computed(() =>
-    this._whiteboardsService.whiteboard(),
+    this._whiteboardsService.whiteboards(),
   );
   public readonly isLoading = signal<boolean>(true);
   public readonly isRefreshing = signal<boolean>(false);
@@ -104,9 +91,5 @@ export class WhiteboardsListComponent implements OnInit {
   public refreshWhiteboards(): void {
     this.isRefreshing.set(true);
     this._loadUserWhiteboards();
-  }
-
-  public copyToClipboard(text: string): void {
-    this._clipboardService.copyToClipboard(text);
   }
 }

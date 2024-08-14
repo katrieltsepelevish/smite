@@ -1,15 +1,17 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import shortid from 'shortid';
 
 import { Whiteboard } from './whiteboard.entity';
 import { User } from '../users/user.entity';
+import { UpdateWhiteboardDto } from './dto/update-whiteboard.dto';
 
 @Injectable()
 export class WhiteboardsService {
@@ -20,6 +22,7 @@ export class WhiteboardsService {
     private readonly _whiteboardsRepository: Repository<Whiteboard>,
     @InjectRepository(User)
     private readonly _usersRepository: Repository<User>,
+    private readonly _dataSource: DataSource,
   ) {}
 
   public async createWhiteboard(ownerId: string): Promise<Whiteboard> {
@@ -97,6 +100,50 @@ export class WhiteboardsService {
     }
 
     whiteboard.users.push(user);
+    return this._whiteboardsRepository.save(whiteboard);
+  }
+
+  public async removeWhiteboard(id: string, userId: string): Promise<void> {
+    const whiteboard = await this._whiteboardsRepository.findOne({
+      where: { id },
+      relations: ['users'],
+    });
+
+    if (!whiteboard) {
+      throw new NotFoundException('Whiteboard not found.');
+    }
+
+    const user = await this._usersRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (whiteboard.ownerId !== userId) {
+      throw new ForbiddenException(
+        'You do not have permission to delete this whiteboard.',
+      );
+    }
+
+    await this._whiteboardsRepository.delete(id);
+  }
+
+  public async updateWhiteboard(
+    id: string,
+    updateWhiteboardDto: UpdateWhiteboardDto,
+  ): Promise<Whiteboard> {
+    const whiteboard = await this._whiteboardsRepository.findOne({
+      where: { id },
+    });
+
+    if (!whiteboard) {
+      throw new NotFoundException('Whiteboard not found.');
+    }
+
+    Object.assign(whiteboard, updateWhiteboardDto);
+
     return this._whiteboardsRepository.save(whiteboard);
   }
 }

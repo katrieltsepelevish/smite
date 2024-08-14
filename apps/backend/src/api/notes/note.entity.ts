@@ -2,14 +2,12 @@ import {
   Entity,
   Column,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   CreateDateColumn,
 } from 'typeorm';
 
 import { Whiteboard } from '../whiteboards/whiteboard.entity';
-import { User } from '../users/user.entity';
 
 @Entity()
 export class Note {
@@ -28,8 +26,8 @@ export class Note {
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: Date;
 
-  @OneToOne(() => User, (user) => user.id, { nullable: true })
-  selectedBy: User;
+  @Column()
+  selectedBy: string;
 
   @ManyToOne(() => Whiteboard, (whiteboard) => whiteboard.notes, {
     onDelete: 'CASCADE',

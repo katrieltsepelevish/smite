@@ -28,15 +28,12 @@ export class Whiteboard {
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: Date;
 
-  @Column({ type: 'uuid' })
+  @Column()
   ownerId: string;
 
-  @ManyToMany(() => User, (user) => user.whiteboards, { cascade: true })
+  @ManyToMany(() => User, (user) => user.whiteboards, { onDelete: 'CASCADE' })
   users: User[];
 
-  @OneToMany(() => Note, (note) => note.whiteboard, {
-    nullable: true,
-    cascade: true,
-  })
+  @OneToMany(() => Note, (note) => note.whiteboard, { nullable: true })
   notes: Note[];
 }
