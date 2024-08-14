@@ -15,7 +15,9 @@ import { twMerge } from 'tailwind-merge';
         <app-sidebar />
         <div class="grid h-screen w-full pl-[56px]">
           <div class="flex flex-col">
-            <app-header />
+            <app-header>
+              <ng-content select="[layoutHeader]"></ng-content>
+            </app-header>
             <main [class]="_computedClass()">
               <ng-content></ng-content>
             </main>

@@ -19,11 +19,13 @@ import { Whiteboard } from '../../../../shared/interfaces/whiteboard.interface';
 import { WhiteboardsService } from '../../../../shared/services/whiteboards.service';
 import { ClipboardService } from '../../../../shared/services/clipboard.service';
 import { RelativeTimePipe } from '../../../../shared/pipes/relative-time.pipe';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-whiteboard',
   standalone: true,
   imports: [
+    RouterLink,
     RelativeTimePipe,
     NgIconComponent,
     SmtButtonDirective,

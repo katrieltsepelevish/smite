@@ -75,3 +75,15 @@ body {
   font-synthesis-weight: none;
   text-rendering: optimizeLegibility;
 }
+
+.grid-pattern {
+  background-image: linear-gradient(
+      90deg,
+      hsla(0, 0%, 70.6%, 0.15) 1px,
+      transparent 0
+    ),
+    linear-gradient(hsla(0, 0%, 70.6%, 0.15) 1px, transparent 0);
+  background-size: 40px 40px;
+  background-position-x: -20px;
+  background-position-y: -20px;
+}
