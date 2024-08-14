@@ -1,0 +1,16 @@
+<app-layout class="bg-muted/40">
+  <div class="flex flex-col gap-4">
+    <div class="flex gap-2 items-end">
+      <span class="text-xl text-gray-400">#</span>
+      <h1 class="font-black text-2xl">WHITEBOARDS</h1>
+    </div>
+
+    <div class="flex flex-1 justify-center overflow-auto gap-8">
+      <div class="flex flex-col gap-4">
+        <app-create-whiteboard />
+        <app-join-whiteboard />
+      </div>
+      <div class="flex-1"><app-whiteboards-list /></div>
+    </div>
+  </div>
+</app-layout>

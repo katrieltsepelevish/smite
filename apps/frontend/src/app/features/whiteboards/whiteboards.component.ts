@@ -7,7 +7,7 @@ import { WhiteboardsListComponent } from './components/whiteboards-list/whiteboa
 import { WhiteboardsService } from '../../shared/services/whiteboards.service';
 
 @Component({
-  selector: 'app-playground',
+  selector: 'app-whiteboards',
   standalone: true,
   imports: [
     LayoutComponent,
@@ -16,6 +16,6 @@ import { WhiteboardsService } from '../../shared/services/whiteboards.service';
     WhiteboardsListComponent,
   ],
   providers: [WhiteboardsService],
-  templateUrl: './playground.component.html',
+  templateUrl: './whiteboards.component.html',
 })
-export class PlaygroundComponent {}
+export class WhiteboardsComponent {}

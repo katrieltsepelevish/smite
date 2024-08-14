@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { SidebarComponent } from '../../shared/components/sidebar/sidebar.component';
 import { HeaderComponent } from '../../shared/components/header/header.component';
+import clsx, { type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 @Component({
   selector: 'app-layout',
@@ -14,9 +16,7 @@ import { HeaderComponent } from '../../shared/components/header/header.component
         <div class="grid h-screen w-full pl-[56px]">
           <div class="flex flex-col">
             <app-header />
-            <main
-              class="flex flex-1 justify-center overflow-auto p-8 gap-8 bg-muted/40"
-            >
+            <main [class]="_computedClass()">
               <ng-content></ng-content>
             </main>
           </div>
@@ -25,4 +25,10 @@ import { HeaderComponent } from '../../shared/components/header/header.component
     </div>
   `,
 })
-export class LayoutComponent {}
+export class LayoutComponent {
+  public readonly overrideClass = input<ClassValue>('', { alias: 'class' });
+
+  protected _computedClass = computed(() =>
+    twMerge(clsx('flex-1 p-8', this.overrideClass())),
+  );
+}
