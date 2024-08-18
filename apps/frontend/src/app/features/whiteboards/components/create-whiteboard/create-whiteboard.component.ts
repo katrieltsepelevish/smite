@@ -41,11 +41,9 @@ export class CreateWhiteboardComponent {
     this._whiteboardsService
       .createWhiteboard()
       .pipe(finalize(() => this.isLoading.set(false)))
-      .subscribe(({ createdAt }) => {
+      .subscribe(() => {
         toast('Whiteboard has been created', {
-          description: moment(createdAt)
-            .tz('Asia/Jerusalem')
-            .format('dddd, MMMM Do [at] h:mma'),
+          description: moment(new Date()).format('dddd, MMMM Do [at] h:mma'),
         });
       });
   }

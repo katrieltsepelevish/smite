@@ -2,7 +2,7 @@
 
 # Define volume names
 REDIS_VOLUME="smite-redis-data"
-POSTGRES_VOLUME="smite-postgres-data"
+MYSQL_VOLUME="smite-mysql-data"
 
 # Check if Docker is installed
 if ! command -v docker &> /dev/null; then
@@ -11,7 +11,7 @@ if ! command -v docker &> /dev/null; then
 fi
 
 # Create Docker volumes if they don't exist
-for volume in "$REDIS_VOLUME" "$POSTGRES_VOLUME"; do
+for volume in "$REDIS_VOLUME" "$MYSQL_VOLUME"; do
     if ! docker volume ls --quiet | grep -q "$volume"; then
         echo "Creating Docker volume: $volume"
         docker volume create "$volume"
@@ -22,15 +22,14 @@ done
 echo "Starting Redis container with volume for data persistence..."
 docker run -d --name smite-redis -p 6379:6379 -v "$REDIS_VOLUME":/data redis
 
-# Start PostgreSQL container
-echo "Starting PostgreSQL container with volume for data persistence..."
-docker run -d --name smite-postgres \
-    -p 5432:5432 \
-    -v "$POSTGRES_VOLUME":/var/lib/postgresql/data \
-    -e POSTGRES_USER=root \
-    -e POSTGRES_PASSWORD=password \
-    -e POSTGRES_DB=smite \
-    postgres
+# Start MySQL container
+echo "Starting MySQL container with volume for data persistence..."
+docker run -d --name smite-mysql \
+    -p 3306:3306 \
+    -v "$MYSQL_VOLUME":/var/lib/mysql \
+    -e MYSQL_ROOT_PASSWORD=password \
+    -e MYSQL_DATABASE=smite \
+    mysql
 
 # List running containers
 echo "Running containers:"

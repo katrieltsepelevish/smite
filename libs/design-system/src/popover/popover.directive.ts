@@ -64,7 +64,7 @@ export class SmtPopoverTriggerDirective implements OnInit, OnDestroy {
             offsetY: this._offset(),
           },
         ]),
-      scrollStrategy: this._overlay.scrollStrategies.block(),
+      scrollStrategy: this._overlay.scrollStrategies.close(),
       hasBackdrop: true,
       backdropClass: 'cdk-overlay-backdrop',
     });
@@ -87,7 +87,7 @@ export class SmtPopoverTriggerDirective implements OnInit, OnDestroy {
     if (!this._overlayRef.hasAttached()) {
       const popoverTriggerSelectorPortal = new TemplatePortal(
         this.smtPopoverTrigger,
-        this._viewContainerRef
+        this._viewContainerRef,
       );
 
       this._overlayRef.attach(popoverTriggerSelectorPortal);

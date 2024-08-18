@@ -8,6 +8,6 @@ import moment from 'moment-timezone';
 export class RelativeTimePipe implements PipeTransform {
   transform(value: Date | string | number): string {
     if (!value) return '';
-    return moment(value).tz('Asia/Jerusalem').fromNow();
+    return moment(value).utc(true).fromNow();
   }
 }

@@ -14,16 +14,16 @@ export class Note {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('jsonb')
+  @Column('json')
   position: { x: number; y: number };
 
   @Column()
   name: string;
 
-  @CreateDateColumn({ type: 'timestamptz' })
+  @CreateDateColumn()
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamptz' })
+  @UpdateDateColumn()
   updatedAt: Date;
 
   @Column()
