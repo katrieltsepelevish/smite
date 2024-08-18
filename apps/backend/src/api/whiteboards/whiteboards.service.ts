@@ -6,7 +6,7 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import shortid from 'shortid';
 
@@ -23,10 +23,13 @@ export class WhiteboardsService {
     private readonly _whiteboardsRepository: Repository<Whiteboard>,
     @InjectRepository(User)
     private readonly _usersRepository: Repository<User>,
-    private readonly _dataSource: DataSource,
   ) {}
 
-  public async createWhiteboard(ownerId: string): Promise<Whiteboard> {
+  public async createWhiteboard({
+    ownerId,
+  }: {
+    ownerId: string;
+  }): Promise<Whiteboard> {
     const owner = await this._usersRepository.findOne({
       where: { id: ownerId },
     });
@@ -35,27 +38,30 @@ export class WhiteboardsService {
       throw new NotFoundException('User not found.');
     }
 
-    const createdWhiteboard = this._whiteboardsRepository.create({
+    const newWhiteboard = this._whiteboardsRepository.create({
       name: 'Untitled',
       token: shortid.generate(),
       ownerId: owner.id,
       users: [owner],
     });
 
-    return this._whiteboardsRepository.save(createdWhiteboard);
+    return this._whiteboardsRepository.save(newWhiteboard);
   }
 
-  public async getWhiteboardByToken(
-    token: string,
-    userId: string,
-  ): Promise<Whiteboard> {
+  public async getWhiteboardByToken({
+    token,
+    userId,
+  }: {
+    token: string;
+    userId: string;
+  }): Promise<Whiteboard> {
     const user = await this._usersRepository.findOne({
       where: { id: userId },
       relations: ['whiteboards'],
     });
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('User not found.');
     }
 
     const whiteboard = await this._whiteboardsRepository.findOne({
@@ -73,30 +79,37 @@ export class WhiteboardsService {
 
     if (!hasJoinedWhiteboard) {
       throw new BadRequestException(
-        'You do not have access to this whiteboard. Please ensure you have joined the whiteboard or contact support if you believe this is an error.',
+        'You do not have access to this whiteboard.',
       );
     }
 
     return whiteboard;
   }
 
-  public async getWhiteboardsByUserId(userId: string): Promise<Whiteboard[]> {
+  public async getWhiteboardsByUserId({
+    userId,
+  }: {
+    userId: string;
+  }): Promise<Whiteboard[]> {
     const user = await this._usersRepository.findOne({
       where: { id: userId },
       relations: ['whiteboards'],
     });
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('User not found.');
     }
 
     return user.whiteboards;
   }
 
-  public async joinWhiteboard(
-    token: string,
-    userId: string,
-  ): Promise<Whiteboard> {
+  public async joinWhiteboard({
+    token,
+    userId,
+  }: {
+    token: string;
+    userId: string;
+  }): Promise<Whiteboard> {
     const whiteboard = await this._whiteboardsRepository.findOne({
       where: { token },
       relations: ['users'],
@@ -106,19 +119,13 @@ export class WhiteboardsService {
       throw new NotFoundException('Whiteboard not found.');
     }
 
-    const user = await this._usersRepository.findOne({
-      where: { id: userId },
-    });
+    const user = await this._usersRepository.findOne({ where: { id: userId } });
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('User not found.');
     }
 
-    const isUserAlreadyInWhiteboard = whiteboard.users.some(
-      ({ id }) => id === user.id,
-    );
-
-    if (isUserAlreadyInWhiteboard) {
+    if (whiteboard.users.some((u) => u.id === user.id)) {
       throw new ConflictException('User already joined the whiteboard.');
     }
 
@@ -126,7 +133,13 @@ export class WhiteboardsService {
     return this._whiteboardsRepository.save(whiteboard);
   }
 
-  public async removeWhiteboard(id: string, userId: string): Promise<void> {
+  public async removeWhiteboard({
+    id,
+    userId,
+  }: {
+    id: string;
+    userId: string;
+  }): Promise<void> {
     const whiteboard = await this._whiteboardsRepository.findOne({
       where: { id },
       relations: ['users'],
@@ -136,12 +149,10 @@ export class WhiteboardsService {
       throw new NotFoundException('Whiteboard not found.');
     }
 
-    const user = await this._usersRepository.findOne({
-      where: { id: userId },
-    });
+    const user = await this._usersRepository.findOne({ where: { id: userId } });
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('User not found.');
     }
 
     if (whiteboard.ownerId !== userId) {
@@ -153,10 +164,13 @@ export class WhiteboardsService {
     await this._whiteboardsRepository.delete(id);
   }
 
-  public async updateWhiteboard(
-    id: string,
-    updateWhiteboardDto: UpdateWhiteboardDto,
-  ): Promise<Whiteboard> {
+  public async updateWhiteboard({
+    id,
+    updateWhiteboardDto,
+  }: {
+    id: string;
+    updateWhiteboardDto: UpdateWhiteboardDto;
+  }): Promise<Whiteboard> {
     const whiteboard = await this._whiteboardsRepository.findOne({
       where: { id },
     });
@@ -166,7 +180,6 @@ export class WhiteboardsService {
     }
 
     Object.assign(whiteboard, updateWhiteboardDto);
-
     return this._whiteboardsRepository.save(whiteboard);
   }
 }

@@ -13,7 +13,13 @@ import { User } from '../users/user.entity';
 export class AuthService {
   constructor(private readonly _usersService: UsersService) {}
 
-  async validateUser(email: string, password: string): Promise<User> {
+  async validateUser({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }): Promise<User> {
     try {
       const user: User = await this._usersService.findByEmail(email);
 
@@ -28,19 +34,19 @@ export class AuthService {
     }
   }
 
-  async register(user: CreateUserDto): Promise<User> {
-    await this._validateCreateUser(user);
+  async register({ email, password, ...rest }: CreateUserDto): Promise<User> {
+    await this._validateCreateUser({ email });
 
-    const hashedPassword = await Bcrypt.hash(user.password, 10);
-    const newUser: CreateUserDto = { ...user, password: hashedPassword };
+    const hashedPassword = await Bcrypt.hash(password, 10);
+    const newUser: CreateUserDto = { ...rest, email, password: hashedPassword };
     const createdUser: User = await this._usersService.createUser(newUser);
 
     return createdUser;
   }
 
-  private async _validateCreateUser(user: CreateUserDto) {
+  private async _validateCreateUser({ email }: { email: string }) {
     try {
-      await this._usersService.findByEmail(user.email);
+      await this._usersService.findByEmail(email);
     } catch (err) {
       return;
     }

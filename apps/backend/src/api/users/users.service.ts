@@ -19,16 +19,16 @@ export class UsersService {
     private readonly _usersRepository: Repository<User>,
   ) {}
 
-  public async createUser(createUserDto: CreateUserDto): Promise<User> {
+  public async createUser({ email, ...rest }: CreateUserDto): Promise<User> {
     const existingUser = await this._usersRepository.findOne({
-      where: { email: createUserDto.email },
+      where: { email },
     });
 
     if (existingUser) {
       throw new ConflictException('Email already taken.');
     }
 
-    const user = this._usersRepository.create(createUserDto);
+    const user = this._usersRepository.create({ email, ...rest });
     return this._usersRepository.save(user);
   }
 
@@ -45,7 +45,7 @@ export class UsersService {
     return user;
   }
 
-  public async getUser(id: string): Promise<User> {
+  public async getUser({ id }: { id: string }): Promise<User> {
     const user = await this._usersRepository.findOne({
       where: { id },
     });

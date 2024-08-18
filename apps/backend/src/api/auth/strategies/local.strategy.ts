@@ -12,7 +12,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
   async validate(email: string, password: string) {
     try {
-      return await this._authService.validateUser(email, password);
+      return await this._authService.validateUser({ email, password });
     } catch (err) {
       throw new UnauthorizedException(err);
     }

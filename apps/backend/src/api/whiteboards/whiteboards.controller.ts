@@ -11,11 +11,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 
-import { JwtGuard } from '../auth/guards/jwt.gaurd';
 import { WhiteboardsService } from './whiteboards.service';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { User } from '../users/user.entity';
 import { UpdateWhiteboardDto } from './dto/update-whiteboard.dto';
+import { JwtGuard } from '../auth/guards/jwt.gaurd';
 
 @Controller('/whiteboards')
 export class WhiteboardsController {
@@ -25,24 +25,24 @@ export class WhiteboardsController {
   @UseGuards(JwtGuard)
   @HttpCode(HttpStatus.CREATED)
   async createWhiteboard(@CurrentUser() user: User) {
-    const createdWhiteboard = await this._whiteboardsService.createWhiteboard(
-      user.id,
-    );
+    const createdWhiteboard = await this._whiteboardsService.createWhiteboard({
+      ownerId: user.id,
+    });
 
     return createdWhiteboard;
   }
 
-  @Post('/join/:id')
+  @Post('/join/:token')
   @UseGuards(JwtGuard)
   @HttpCode(HttpStatus.OK)
   async joinWhiteboard(
-    @Param('id') whiteboardId: string,
+    @Param('token') token: string,
     @CurrentUser() user: User,
   ) {
-    const joinedWhiteboard = await this._whiteboardsService.joinWhiteboard(
-      whiteboardId,
-      user.id,
-    );
+    const joinedWhiteboard = await this._whiteboardsService.joinWhiteboard({
+      token,
+      userId: user.id,
+    });
 
     return joinedWhiteboard;
   }
@@ -51,9 +51,9 @@ export class WhiteboardsController {
   @UseGuards(JwtGuard)
   @HttpCode(HttpStatus.OK)
   async getUserWhiteboards(@CurrentUser() user: User) {
-    const whiteboards = await this._whiteboardsService.getWhiteboardsByUserId(
-      user.id,
-    );
+    const whiteboards = await this._whiteboardsService.getWhiteboardsByUserId({
+      userId: user.id,
+    });
 
     return whiteboards;
   }
@@ -65,19 +65,22 @@ export class WhiteboardsController {
     @Param('token') token: string,
     @CurrentUser() user: User,
   ) {
-    const whiteboards = await this._whiteboardsService.getWhiteboardByToken(
+    const whiteboard = await this._whiteboardsService.getWhiteboardByToken({
       token,
-      user.id,
-    );
+      userId: user.id,
+    });
 
-    return whiteboards;
+    return whiteboard;
   }
 
   @Delete('/:id')
   @UseGuards(JwtGuard)
   @HttpCode(HttpStatus.OK)
   async deleteWhiteboard(@Param('id') id: string, @CurrentUser() user: User) {
-    return this._whiteboardsService.removeWhiteboard(id, user.id);
+    return this._whiteboardsService.removeWhiteboard({
+      id,
+      userId: user.id,
+    });
   }
 
   @Patch('/:id')
@@ -87,6 +90,9 @@ export class WhiteboardsController {
     @Param('id') id: string,
     @Body() updateWhiteboardDto: UpdateWhiteboardDto,
   ) {
-    return this._whiteboardsService.updateWhiteboard(id, updateWhiteboardDto);
+    return this._whiteboardsService.updateWhiteboard({
+      id,
+      updateWhiteboardDto,
+    });
   }
 }
