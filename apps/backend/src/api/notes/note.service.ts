@@ -1,10 +1,12 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Note } from './note.entity';
 import { Whiteboard } from '../whiteboards/whiteboard.entity';
 import { CreateNoteDto } from './dto/create-note.dto';
+import { WhiteboardNotFoundException } from '../whiteboards/exceptions/whiteboard-not-found.exception';
+import { NoteNotFoundException } from './exceptions/note-not-found.exception';
 
 @Injectable()
 export class WhiteboardsService {
@@ -23,7 +25,7 @@ export class WhiteboardsService {
     });
 
     if (!whiteboard) {
-      throw new NotFoundException('Whiteboard not found.');
+      throw new WhiteboardNotFoundException();
     }
 
     const createdNote = this._notesRepository.create({
@@ -42,7 +44,7 @@ export class WhiteboardsService {
     });
 
     if (!note) {
-      throw new NotFoundException('Note not found.');
+      throw new NoteNotFoundException();
     }
 
     return note;

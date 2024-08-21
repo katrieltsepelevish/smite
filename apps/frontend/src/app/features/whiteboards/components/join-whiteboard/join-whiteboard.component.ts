@@ -18,6 +18,7 @@ import {
 import { WhiteboardsService } from '../../../../shared/services/whiteboards.service';
 import { finalize } from 'rxjs';
 import { toast } from 'ngx-sonner';
+import { WhiteboardService } from '../../../../shared/services/whiteboard.service';
 
 @Component({
   selector: 'app-join-whiteboard',
@@ -37,6 +38,7 @@ import { toast } from 'ngx-sonner';
 })
 export class JoinWhiteboardComponent {
   private readonly _whiteboardsService = inject(WhiteboardsService);
+  private readonly _whiteboardService = inject(WhiteboardService);
 
   public readonly submitted = signal<boolean>(false);
   public readonly isLoading = signal<boolean>(false);
@@ -56,7 +58,7 @@ export class JoinWhiteboardComponent {
     this.isLoading.set(true);
     this.hasError.set(false);
 
-    this._whiteboardsService
+    this._whiteboardService
       .joinWhiteboard(
         this.joinWhiteboardForm.controls.whiteboardId.value as string,
       )

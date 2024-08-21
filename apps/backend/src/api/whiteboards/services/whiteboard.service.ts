@@ -1,21 +1,18 @@
-import {
-  BadRequestException,
-  ConflictException,
-  ForbiddenException,
-  Injectable,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import shortid from 'shortid';
 
-import { Whiteboard } from './whiteboard.entity';
-import { User } from '../users/user.entity';
-import { UpdateWhiteboardDto } from './dto/update-whiteboard.dto';
+import { Whiteboard } from '../whiteboard.entity';
+import { User } from '../../users/user.entity';
+import { UpdateWhiteboardDto } from '../dto/update-whiteboard.dto';
+import { UserNotFoundException } from '../../users/exceptions/user-not-found.exception';
+import { WhiteboardNotFoundException } from '../exceptions/whiteboard-not-found.exception';
+import { WhiteboardAccessDeniedException } from '../exceptions/whiteboard-acess-denied.exception';
+import { WhiteboardUserAlreadyJoinedException } from '../exceptions/whiteboard-user-already-joined.exception';
+import { WhiteboardDeletePermissionsException } from '../exceptions/whiteboard-delete-permissions.exception';
 
 @Injectable()
-export class WhiteboardsService {
+export class WhiteboardService {
   protected readonly _logger: Logger;
 
   constructor(
@@ -24,29 +21,6 @@ export class WhiteboardsService {
     @InjectRepository(User)
     private readonly _usersRepository: Repository<User>,
   ) {}
-
-  public async createWhiteboard({
-    ownerId,
-  }: {
-    ownerId: string;
-  }): Promise<Whiteboard> {
-    const owner = await this._usersRepository.findOne({
-      where: { id: ownerId },
-    });
-
-    if (!owner) {
-      throw new NotFoundException('User not found.');
-    }
-
-    const newWhiteboard = this._whiteboardsRepository.create({
-      name: 'Untitled',
-      token: shortid.generate(),
-      ownerId: owner.id,
-      users: [owner],
-    });
-
-    return this._whiteboardsRepository.save(newWhiteboard);
-  }
 
   public async getWhiteboardByToken({
     token,
@@ -61,7 +35,7 @@ export class WhiteboardsService {
     });
 
     if (!user) {
-      throw new NotFoundException('User not found.');
+      throw new UserNotFoundException();
     }
 
     const whiteboard = await this._whiteboardsRepository.findOne({
@@ -70,7 +44,7 @@ export class WhiteboardsService {
     });
 
     if (!whiteboard) {
-      throw new NotFoundException('Whiteboard not found.');
+      throw new WhiteboardNotFoundException();
     }
 
     const hasJoinedWhiteboard = whiteboard.users.some(
@@ -78,29 +52,10 @@ export class WhiteboardsService {
     );
 
     if (!hasJoinedWhiteboard) {
-      throw new BadRequestException(
-        'You do not have access to this whiteboard.',
-      );
+      throw new WhiteboardAccessDeniedException();
     }
 
     return whiteboard;
-  }
-
-  public async getWhiteboardsByUserId({
-    userId,
-  }: {
-    userId: string;
-  }): Promise<Whiteboard[]> {
-    const user = await this._usersRepository.findOne({
-      where: { id: userId },
-      relations: ['whiteboards'],
-    });
-
-    if (!user) {
-      throw new NotFoundException('User not found.');
-    }
-
-    return user.whiteboards;
   }
 
   public async joinWhiteboard({
@@ -116,17 +71,17 @@ export class WhiteboardsService {
     });
 
     if (!whiteboard) {
-      throw new NotFoundException('Whiteboard not found.');
+      throw new WhiteboardNotFoundException();
     }
 
     const user = await this._usersRepository.findOne({ where: { id: userId } });
 
     if (!user) {
-      throw new NotFoundException('User not found.');
+      throw new UserNotFoundException();
     }
 
     if (whiteboard.users.some((u) => u.id === user.id)) {
-      throw new ConflictException('User already joined the whiteboard.');
+      throw new WhiteboardUserAlreadyJoinedException();
     }
 
     whiteboard.users.push(user);
@@ -146,19 +101,17 @@ export class WhiteboardsService {
     });
 
     if (!whiteboard) {
-      throw new NotFoundException('Whiteboard not found.');
+      throw new WhiteboardNotFoundException();
     }
 
     const user = await this._usersRepository.findOne({ where: { id: userId } });
 
     if (!user) {
-      throw new NotFoundException('User not found.');
+      throw new UserNotFoundException();
     }
 
     if (whiteboard.ownerId !== userId) {
-      throw new ForbiddenException(
-        'You do not have permission to delete this whiteboard.',
-      );
+      throw new WhiteboardDeletePermissionsException();
     }
 
     await this._whiteboardsRepository.delete(id);
@@ -176,7 +129,7 @@ export class WhiteboardsService {
     });
 
     if (!whiteboard) {
-      throw new NotFoundException('Whiteboard not found.');
+      throw new WhiteboardNotFoundException();
     }
 
     Object.assign(whiteboard, updateWhiteboardDto);

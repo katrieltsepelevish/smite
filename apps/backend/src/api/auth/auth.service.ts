@@ -1,13 +1,12 @@
-import {
-  BadRequestException,
-  Injectable,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as Bcrypt from 'bcrypt';
 
 import { UsersService } from '../users/users.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { User } from '../users/user.entity';
+import { UserNotFoundException } from '../users/exceptions/user-not-found.exception';
+import { PasswordMismatchException } from '../users/exceptions/password-mismatch.exception';
+import { EmailAlreadyTakenException } from '../users/exceptions/email-already-taken.exception';
 
 @Injectable()
 export class AuthService {
@@ -25,12 +24,12 @@ export class AuthService {
 
       const isMatch: boolean = Bcrypt.compareSync(password, user.password);
       if (!isMatch) {
-        throw new BadRequestException('Password does not match.');
+        throw new PasswordMismatchException();
       }
 
       return user;
     } catch (err) {
-      throw new BadRequestException('User not found.');
+      throw new UserNotFoundException();
     }
   }
 
@@ -51,6 +50,6 @@ export class AuthService {
       return;
     }
 
-    throw new UnprocessableEntityException('Email already exists.');
+    throw new EmailAlreadyTakenException();
   }
 }

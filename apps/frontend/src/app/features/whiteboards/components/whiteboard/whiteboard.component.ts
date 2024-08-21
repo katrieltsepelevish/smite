@@ -20,6 +20,7 @@ import { WhiteboardsService } from '../../../../shared/services/whiteboards.serv
 import { ClipboardService } from '../../../../shared/services/clipboard.service';
 import { RelativeTimePipe } from '../../../../shared/pipes/relative-time.pipe';
 import { RouterLink } from '@angular/router';
+import { WhiteboardService } from '../../../../shared/services/whiteboard.service';
 
 @Component({
   selector: 'app-whiteboard',
@@ -46,6 +47,7 @@ import { RouterLink } from '@angular/router';
 })
 export class WhiteboardComponent {
   private readonly _whiteboardsService = inject(WhiteboardsService);
+  private readonly _whiteboardService = inject(WhiteboardService);
   private readonly _clipboardService = inject(ClipboardService);
 
   @Input() whiteboard!: Whiteboard;
@@ -55,7 +57,7 @@ export class WhiteboardComponent {
   }
 
   public deleteWhiteboard(id: string): void {
-    this._whiteboardsService
+    this._whiteboardService
       .deleteWhiteboard(id)
 
       .subscribe({

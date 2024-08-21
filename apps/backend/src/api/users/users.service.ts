@@ -1,14 +1,11 @@
-import {
-  ConflictException,
-  Injectable,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './user.entity';
+import { UserNotFoundException } from './exceptions/user-not-found.exception';
+import { EmailAlreadyTakenException } from './exceptions/email-already-taken.exception';
 
 @Injectable()
 export class UsersService {
@@ -25,7 +22,7 @@ export class UsersService {
     });
 
     if (existingUser) {
-      throw new ConflictException('Email already taken.');
+      throw new EmailAlreadyTakenException();
     }
 
     const user = this._usersRepository.create({ email, ...rest });
@@ -39,7 +36,7 @@ export class UsersService {
 
     if (!user) {
       this._logger.warn('User not found with email:', email);
-      throw new NotFoundException('User not found.');
+      throw new UserNotFoundException();
     }
 
     return user;
@@ -52,7 +49,7 @@ export class UsersService {
 
     if (!user) {
       this._logger.warn('User not found with id:', id);
-      throw new NotFoundException('User not found.');
+      throw new UserNotFoundException();
     }
 
     return user;
