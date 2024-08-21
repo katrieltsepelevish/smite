@@ -5,6 +5,7 @@ import { CreateWhiteboardComponent } from './components/create-whiteboard/create
 import { JoinWhiteboardComponent } from './components/join-whiteboard/join-whiteboard.component';
 import { WhiteboardsListComponent } from './components/whiteboards-list/whiteboards-list.component';
 import { WhiteboardsService } from '../../shared/services/whiteboards.service';
+import { WhiteboardService } from '../../shared/services/whiteboard.service';
 
 @Component({
   selector: 'app-whiteboards',
@@ -15,7 +16,7 @@ import { WhiteboardsService } from '../../shared/services/whiteboards.service';
     JoinWhiteboardComponent,
     WhiteboardsListComponent,
   ],
-  providers: [WhiteboardsService],
+  providers: [WhiteboardsService, WhiteboardService],
   templateUrl: './whiteboards.component.html',
 })
 export class WhiteboardsComponent {}

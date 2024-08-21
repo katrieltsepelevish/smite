@@ -10,6 +10,7 @@ import {
   SmtMenuComponent,
   SmtMenuItemComponent,
   SmtMenuSeparatorComponent,
+  SmtGradientProfileComponent,
 } from '@smite/design-system';
 import { AuthService } from '../../../core/auth/auth.service';
 import { Router } from '@angular/router';
@@ -27,6 +28,7 @@ import { Router } from '@angular/router';
     SmtMenuComponent,
     SmtMenuItemComponent,
     SmtMenuSeparatorComponent,
+    SmtGradientProfileComponent,
   ],
   providers: [provideIcons({ lucideLogOut })],
   templateUrl: './header.component.html',

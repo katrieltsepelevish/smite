@@ -4,13 +4,11 @@
   <ng-content></ng-content>
 
   <button variant="link" [smtPopoverTrigger]="profile" align="end">
-    <smt-avatar size="md">
-      <img
-        src="https://ui.shadcn.com/avatars/01.png"
-        alt="Katriel Tsepelevish"
-        smtAvatarImage
-      />
-    </smt-avatar>
+    <smt-gradient-profile
+      [text]="'Katriel Tsepelevish'"
+      [width]="40"
+      [height]="40"
+    />
   </button>
 
   <ng-template #profile>

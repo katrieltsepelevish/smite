@@ -11,3 +11,4 @@ export * from './label';
 export * from './input';
 export * from './form-field';
 export * from './alert';
+export * from './gradient-profile';

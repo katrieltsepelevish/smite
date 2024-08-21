@@ -14,12 +14,11 @@ import {
   SmtPopoverTriggerDirective,
 } from '@smite/design-system';
 import { toast } from 'ngx-sonner';
+import { RouterLink } from '@angular/router';
 
 import { Whiteboard } from '../../../../shared/interfaces/whiteboard.interface';
-import { WhiteboardsService } from '../../../../shared/services/whiteboards.service';
 import { ClipboardService } from '../../../../shared/services/clipboard.service';
 import { RelativeTimePipe } from '../../../../shared/pipes/relative-time.pipe';
-import { RouterLink } from '@angular/router';
 import { WhiteboardService } from '../../../../shared/services/whiteboard.service';
 
 @Component({
@@ -46,7 +45,6 @@ import { WhiteboardService } from '../../../../shared/services/whiteboard.servic
   templateUrl: './whiteboard.component.html',
 })
 export class WhiteboardComponent {
-  private readonly _whiteboardsService = inject(WhiteboardsService);
   private readonly _whiteboardService = inject(WhiteboardService);
   private readonly _clipboardService = inject(ClipboardService);
 
