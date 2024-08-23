@@ -9,7 +9,7 @@ import { WhiteboardNotFoundException } from '../whiteboards/exceptions/whiteboar
 import { NoteNotFoundException } from './exceptions/note-not-found.exception';
 
 @Injectable()
-export class WhiteboardsService {
+export class NotesService {
   protected readonly _logger: Logger;
 
   constructor(
