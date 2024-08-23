@@ -11,7 +11,9 @@ import {
 import { User } from '../users/user.entity';
 import { Note } from '../notes/note.entity';
 
-@Entity()
+@Entity({
+  name: 'whiteboards',
+})
 export class Whiteboard {
   @PrimaryGeneratedColumn('uuid')
   id: string;

@@ -9,7 +9,9 @@ import {
 
 import { Whiteboard } from '../whiteboards/whiteboard.entity';
 
-@Entity()
+@Entity({
+  name: 'notes',
+})
 export class Note {
   @PrimaryGeneratedColumn('uuid')
   id: string;

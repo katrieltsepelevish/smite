@@ -10,7 +10,9 @@ import {
 
 import { Whiteboard } from '../whiteboards/whiteboard.entity';
 
-@Entity()
+@Entity({
+  name: 'users',
+})
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;

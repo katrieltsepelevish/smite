@@ -9,7 +9,7 @@ import {
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 
 import { LayoutComponent } from '../../core/layout/layout.component';
-import { WhiteboardService } from '../../shared/services/whiteboard.service';
+import { WhiteboardsService } from '../../shared/services/whiteboards.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize } from 'rxjs';
@@ -19,11 +19,11 @@ import { lucideLoader } from '@ng-icons/lucide';
   selector: 'app-playground',
   standalone: true,
   imports: [NgIconComponent, LayoutComponent],
-  providers: [WhiteboardService, provideIcons({ lucideLoader })],
+  providers: [WhiteboardsService, provideIcons({ lucideLoader })],
   templateUrl: './playground.component.html',
 })
 export class PlaygroundComponent implements OnInit {
-  private readonly _whiteboardService = inject(WhiteboardService);
+  private readonly _whiteboardsService = inject(WhiteboardsService);
   private readonly _destoryRef = inject(DestroyRef);
   private readonly _route = inject(ActivatedRoute);
   private readonly _router = inject(Router);
@@ -33,11 +33,11 @@ export class PlaygroundComponent implements OnInit {
   public readonly isLoading = signal<boolean>(true);
 
   public readonly whiteboard = computed(() =>
-    this._whiteboardService.whiteboard(),
+    this._whiteboardsService.whiteboard(),
   );
 
   ngOnInit(): void {
-    this._whiteboardService
+    this._whiteboardsService
       .getWhiteboard(this._boardId as string)
       .pipe(
         takeUntilDestroyed(this._destoryRef),

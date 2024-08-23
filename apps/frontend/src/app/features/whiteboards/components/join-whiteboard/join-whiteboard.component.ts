@@ -14,11 +14,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-
-import { WhiteboardsService } from '../../../../shared/services/whiteboards.service';
 import { finalize } from 'rxjs';
 import { toast } from 'ngx-sonner';
-import { WhiteboardService } from '../../../../shared/services/whiteboard.service';
+import { Router } from '@angular/router';
+
+import { WhiteboardsService } from '../../../../shared/services/whiteboards.service';
 
 @Component({
   selector: 'app-join-whiteboard',
@@ -38,7 +38,7 @@ import { WhiteboardService } from '../../../../shared/services/whiteboard.servic
 })
 export class JoinWhiteboardComponent {
   private readonly _whiteboardsService = inject(WhiteboardsService);
-  private readonly _whiteboardService = inject(WhiteboardService);
+  private readonly _router = inject(Router);
 
   public readonly submitted = signal<boolean>(false);
   public readonly isLoading = signal<boolean>(false);
@@ -58,7 +58,7 @@ export class JoinWhiteboardComponent {
     this.isLoading.set(true);
     this.hasError.set(false);
 
-    this._whiteboardService
+    this._whiteboardsService
       .joinWhiteboard(
         this.joinWhiteboardForm.controls.whiteboardId.value as string,
       )
@@ -68,8 +68,9 @@ export class JoinWhiteboardComponent {
         }),
       )
       .subscribe({
-        next: () => {
+        next: ({ token }) => {
           toast.success('Joined the whiteboard successfully');
+          this._router.navigate(['/boards', token]);
         },
         error: ({ message }) => {
           toast.error(message);

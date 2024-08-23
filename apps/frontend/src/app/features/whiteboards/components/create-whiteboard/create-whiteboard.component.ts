@@ -12,6 +12,7 @@ import { lucideLoader, lucideToyBrick } from '@ng-icons/lucide';
 import { finalize } from 'rxjs';
 import { toast } from 'ngx-sonner';
 import moment from 'moment-timezone';
+import { Router } from '@angular/router';
 
 import { WhiteboardsService } from '../../../../shared/services/whiteboards.service';
 
@@ -32,6 +33,7 @@ import { WhiteboardsService } from '../../../../shared/services/whiteboards.serv
 })
 export class CreateWhiteboardComponent {
   private readonly _whiteboardsService = inject(WhiteboardsService);
+  private readonly _router = inject(Router);
 
   public readonly isLoading = signal<boolean>(false);
 
@@ -41,10 +43,11 @@ export class CreateWhiteboardComponent {
     this._whiteboardsService
       .createWhiteboard()
       .pipe(finalize(() => this.isLoading.set(false)))
-      .subscribe(() => {
+      .subscribe(({ token }) => {
         toast('Whiteboard has been created', {
           description: moment(new Date()).format('dddd, MMMM Do [at] h:mma'),
         });
+        this._router.navigate(['/boards', token]);
       });
   }
 }

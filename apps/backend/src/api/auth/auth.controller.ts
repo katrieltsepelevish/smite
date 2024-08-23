@@ -23,7 +23,7 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { User } from '../users/user.entity';
 import { JwtGuard } from './guards/jwt.gaurd';
 
-@Controller('/auth')
+@Controller('auth')
 export class AuthController {
   constructor(
     private readonly _configService: ConfigService,
@@ -32,7 +32,7 @@ export class AuthController {
   ) {}
 
   @Public()
-  @Post('/register')
+  @Post('register')
   @HttpCode(HttpStatus.CREATED)
   async register(
     @Body() createUserDto: CreateUserDto,
@@ -67,7 +67,7 @@ export class AuthController {
 
   @Public()
   @UseGuards(AuthGuard('local'))
-  @Post('/login')
+  @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(
     @CurrentUser() user: User,
@@ -98,7 +98,7 @@ export class AuthController {
     return UserUtil.normalizeUser(user);
   }
 
-  @Post('/logout')
+  @Post('logout')
   @UseGuards(JwtGuard)
   @HttpCode(HttpStatus.OK)
   async logout(@Res({ passthrough: true }) res: Response) {
@@ -114,7 +114,7 @@ export class AuthController {
     });
   }
 
-  @Get('/me')
+  @Get('me')
   @UseGuards(JwtGuard)
   @HttpCode(HttpStatus.OK)
   async getUser(@CurrentUser() user: User) {
