@@ -2,36 +2,4 @@
   class="sticky top-0 z-10 flex justify-end h-[57px] items-center gap-1 border-b bg-background px-4"
 >
   <ng-content></ng-content>
-
-  <button variant="link" [smtPopoverTrigger]="profile" align="end">
-    <smt-gradient-profile
-      [text]="'Katriel Tsepelevish'"
-      [width]="40"
-      [height]="40"
-    />
-  </button>
-
-  <ng-template #profile>
-    <smt-menu>
-      <smt-menu-item variant="ghost">
-        <div class="p-2 text-sm font-normal">
-          <div class="flex flex-col gap-2">
-            <p class="text-md font-medium leading-none">Katriel Tsepelevish</p>
-            <p class="text-xs leading-none text-muted-foreground">
-              katriel.tsepelevish&#64;gmail.com
-            </p>
-          </div>
-        </div>
-      </smt-menu-item>
-
-      <smt-menu-separator />
-
-      <smt-menu-item class="p-0">
-        <button smtBtn class="w-full" (click)="logout()">
-          <ng-icon name="lucideLogOut" class="mr-2" size="16" />
-          <span>Logout</span>
-        </button>
-      </smt-menu-item>
-    </smt-menu>
-  </ng-template>
 </header>

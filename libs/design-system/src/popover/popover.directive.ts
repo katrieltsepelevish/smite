@@ -1,4 +1,4 @@
-import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { ConnectedPosition, Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import {
   Directive,
@@ -14,17 +14,17 @@ import {
 } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 
-export type PopoverAlign = 'start' | 'center' | 'end';
+export type PopoverPosition = 'left' | 'right' | 'above' | 'below';
 
 @Directive({
   selector: '[smtPopoverTrigger]',
   standalone: true,
 })
 export class SmtPopoverTriggerDirective implements OnInit, OnDestroy {
-  private readonly _align = signal<PopoverAlign>('start');
+  private readonly _position = signal<PopoverPosition>('below');
   @Input()
-  set align(value: PopoverAlign) {
-    this._align.set(value);
+  set position(value: PopoverPosition) {
+    this._position.set(value);
   }
 
   private readonly _offset = signal<number>(5);
@@ -48,22 +48,7 @@ export class SmtPopoverTriggerDirective implements OnInit, OnDestroy {
       positionStrategy: this._overlay
         .position()
         .flexibleConnectedTo(this._elementRef)
-        .withPositions([
-          {
-            originX: this._align(),
-            originY: 'bottom',
-            overlayX: this._align(),
-            overlayY: 'top',
-            offsetY: this._offset(),
-          },
-          {
-            originX: this._align(),
-            originY: 'top',
-            overlayX: this._align(),
-            overlayY: 'bottom',
-            offsetY: this._offset(),
-          },
-        ]),
+        .withPositions(this._getPopoverPosition()),
       scrollStrategy: this._overlay.scrollStrategies.close(),
       hasBackdrop: true,
       backdropClass: 'cdk-overlay-backdrop',
@@ -81,6 +66,51 @@ export class SmtPopoverTriggerDirective implements OnInit, OnDestroy {
     this._detachPopoverCotnentOverlayFromTrigger();
     this._unsubscribe$.next();
     this._unsubscribe$.complete();
+  }
+
+  private _getPopoverPosition(): ConnectedPosition[] {
+    const offset = this._offset();
+
+    const positions: Record<PopoverPosition, ConnectedPosition[]> = {
+      above: [
+        {
+          originX: 'center',
+          originY: 'top',
+          overlayX: 'center',
+          overlayY: 'bottom',
+          offsetY: -offset,
+        },
+      ],
+      below: [
+        {
+          originX: 'center',
+          originY: 'bottom',
+          overlayX: 'center',
+          overlayY: 'top',
+          offsetY: offset,
+        },
+      ],
+      left: [
+        {
+          originX: 'start',
+          originY: 'center',
+          overlayX: 'end',
+          overlayY: 'center',
+          offsetX: -offset,
+        },
+      ],
+      right: [
+        {
+          originX: 'end',
+          originY: 'center',
+          overlayX: 'start',
+          overlayY: 'center',
+          offsetX: offset,
+        },
+      ],
+    };
+
+    return positions[this._position()] ?? [];
   }
 
   private _attachPopoverContentOverlayToTrigger(): void {

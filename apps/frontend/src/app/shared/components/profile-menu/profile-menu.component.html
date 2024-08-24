@@ -1,0 +1,42 @@
+@if (currentUser$ | async; as currentUser) {
+  <smt-tooltip position="right" label="Profile">
+    <button
+      class="flex items-center justify-center h-[40px] w-[40px]"
+      variant="link"
+      [smtPopoverTrigger]="profile"
+      position="right"
+    >
+      <smt-gradient-profile
+        [text]="currentUser.firstname + ' ' + currentUser.lastname"
+        [width]="28"
+        [height]="28"
+      />
+    </button>
+  </smt-tooltip>
+
+  <ng-template #profile>
+    <smt-menu>
+      <smt-menu-item variant="ghost">
+        <div class="p-2 text-sm font-normal">
+          <div class="flex flex-col gap-2">
+            <p class="text-md font-medium leading-none">
+              {{ currentUser.firstname + ' ' + currentUser.lastname }}
+            </p>
+            <p class="text-xs leading-none text-muted-foreground">
+              {{ currentUser.email }}
+            </p>
+          </div>
+        </div>
+      </smt-menu-item>
+
+      <smt-menu-separator />
+
+      <smt-menu-item class="p-0">
+        <button smtBtn class="w-full" (click)="logout()">
+          <ng-icon name="lucideLogOut" class="mr-2" size="16" />
+          <span>Logout</span>
+        </button>
+      </smt-menu-item>
+    </smt-menu>
+  </ng-template>
+}

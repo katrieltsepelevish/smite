@@ -24,7 +24,7 @@ import { lucideLoader } from '@ng-icons/lucide';
 })
 export class PlaygroundComponent implements OnInit {
   private readonly _whiteboardsService = inject(WhiteboardsService);
-  private readonly _destoryRef = inject(DestroyRef);
+  private readonly _destroyRef = inject(DestroyRef);
   private readonly _route = inject(ActivatedRoute);
   private readonly _router = inject(Router);
 
@@ -40,7 +40,7 @@ export class PlaygroundComponent implements OnInit {
     this._whiteboardsService
       .getWhiteboard(this._boardId as string)
       .pipe(
-        takeUntilDestroyed(this._destoryRef),
+        takeUntilDestroyed(this._destroyRef),
         finalize(() => this.isLoading.set(false)),
       )
       .subscribe({

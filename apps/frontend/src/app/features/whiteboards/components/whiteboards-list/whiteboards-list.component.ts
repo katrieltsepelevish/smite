@@ -50,7 +50,7 @@ import { WhiteboardComponent } from '../whiteboard/whiteboard.component';
 })
 export class WhiteboardsListComponent implements OnInit {
   private readonly _whiteboardsService = inject(WhiteboardsService);
-  private readonly _destoryRef = inject(DestroyRef);
+  private readonly _destroyRef = inject(DestroyRef);
 
   public readonly whiteboards = computed(() =>
     this._whiteboardsService.whiteboards(),
@@ -68,7 +68,7 @@ export class WhiteboardsListComponent implements OnInit {
     this._whiteboardsService
       .getUserWhiteboards()
       .pipe(
-        takeUntilDestroyed(this._destoryRef),
+        takeUntilDestroyed(this._destroyRef),
         finalize(() => {
           this.isLoading.set(false);
           this.isRefreshing.set(false);
