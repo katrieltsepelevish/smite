@@ -49,12 +49,7 @@ export class SmtGradientProfileComponent {
   public readonly overrideClass = input<ClassValue>('', { alias: 'class' });
 
   protected _computedClass = computed(() =>
-    twMerge(
-      clsx(
-        'inline-block rounded-full bg-cover bg-center',
-        this.overrideClass(),
-      ),
-    ),
+    twMerge(clsx('flex rounded-full bg-cover bg-center', this.overrideClass())),
   );
 
   private readonly _elementRef = inject(ElementRef);

@@ -14,11 +14,10 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
 import { AuthService } from './auth.service';
-import { DomainUtil } from './utils/domain.util';
+import { DomainUtil, UserUtil } from '../../shared/utils';
 import { Public } from './decorators/public.decorator';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { AccessTokenPayload } from './interfaces/access-token-payload.interface';
-import { UserUtil } from './utils/user.util';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { User } from '../users/user.entity';
 import { JwtGuard } from './guards/jwt.gaurd';

@@ -1,6 +1,8 @@
 <app-layout class="grid-pattern">
-  <div layoutHeader class="flex flex-1 justify-center items-center">
-    {{ whiteboard()?.name }}
+  <div layoutHeader class="flex flex-1 justify-between items-center">
+    <span>{{ whiteboard()?.name }}</span>
+
+    <app-presence />
   </div>
   @if (isLoading()) {
     <div class="flex flex-1 justify-center items-center h-full">

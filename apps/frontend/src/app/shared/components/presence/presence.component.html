@@ -1,0 +1,23 @@
+@if (activeUsers().length > 0) {
+  <div class="flex mr-[10px]">
+    @for (user of activeUsers(); track user.id; let idx = $index) {
+      <smt-tooltip
+        position="below"
+        [label]="user.firstname + ' ' + user.lastname"
+      >
+        <div
+          class="relative mr-[-10px] p-[2px] bg-white rounded-full"
+          [ngStyle]="{
+            'z-index': -idx,
+          }"
+        >
+          <smt-gradient-profile
+            [text]="user.firstname + ' ' + user.lastname"
+            [width]="28"
+            [height]="28"
+          />
+        </div>
+      </smt-tooltip>
+    }
+  </div>
+}
